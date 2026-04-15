@@ -17,13 +17,11 @@ export default function Error({
 
   return (
     <main className="text-center py-24">
-      {/* <H1 className="mb-5">Something went wrong!</H1> */}
-      <H1>{error.message}</H1>
+      <H1 className="mb-5">Something went wrong!</H1>
+      <p className="text-white/75 mb-8">{error.message}</p>
       <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          reset
-        }
+        onClick={reset}
+        className="bg-white/10 px-5 py-3 rounded-md text-sm hover:bg-white/20 transition"
       >
         Try again
       </button>
