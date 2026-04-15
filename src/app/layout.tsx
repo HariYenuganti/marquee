@@ -8,8 +8,20 @@ import Container from '@/components/container';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Evento - Find Events Around You',
+  title: {
+    default: 'Evento - Find Events Around You',
+    template: '%s | Evento',
+  },
   description: 'Browse more than 10,000 events around the world',
+  openGraph: {
+    title: 'Evento - Find Events Around You',
+    description: 'Browse more than 10,000 events around the world',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  authors: [{ name: 'HariYenuganti' }],
 };
 
 export default function RootLayout({

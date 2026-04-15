@@ -16,6 +16,12 @@ export async function generateMetadata({ params }: EventPageProps) {
 
   return {
     title: event.name,
+    description: event.description.slice(0, 160),
+    openGraph: {
+      title: event.name,
+      description: event.description.slice(0, 160),
+      images: [event.imageUrl],
+    },
   };
 }
 

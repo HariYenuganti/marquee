@@ -1,0 +1,10 @@
+# Build artifacts
+.next/
+out/
+build/
+
+# Dependencies
+node_modules/
+
+# Generated files
+prisma/generated/
