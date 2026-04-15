@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier --write .",
     "postinstall": "prisma generate"
   },
   "prisma": {
@@ -35,6 +36,7 @@
     "prisma": "^5.6.0",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.1",
+    "prettier": "^3.2.0",
     "typescript": "^5"
   }
 }
