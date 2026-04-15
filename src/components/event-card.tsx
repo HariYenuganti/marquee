@@ -9,7 +9,6 @@ import { useRef } from 'react';
 type EventCardProps = {
   event: EventoEvent;
 };
-const MotionLink = motion(Link);
 
 export default function EventCard({ event }: EventCardProps) {
   const ref = useRef(null);
@@ -22,18 +21,21 @@ export default function EventCard({ event }: EventCardProps) {
   const opacityProgress = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
 
   return (
-    <MotionLink
+    <motion.div
       ref={ref}
       className="flex-1 basis-80 h-[380px] max-w-[500px]"
-      href={`/event/${event.slug}`}
       style={{
         scale: scaleProgress,
         opacity: opacityProgress,
-      } as unknown as React.CSSProperties}
+      }}
       initial={{
         scale: 0,
         opacity: 0.8,
       }}
+    >
+    <Link
+      className="block h-full"
+      href={`/event/${event.slug}`}
     >
       <section className="w-full h-full flex flex-col  bg-white/[3%] rounded-xl overflow-hidden relative state-effects">
         <Image
@@ -59,6 +61,7 @@ export default function EventCard({ event }: EventCardProps) {
           </p>
         </section>
       </section>
-    </MotionLink>
+    </Link>
+    </motion.div>
   );
 }
