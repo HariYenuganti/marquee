@@ -1,62 +1,149 @@
 <div align="center">
 
-<h1>Evento</h1>
+# Evento
 
-<p><strong>A modern event-discovery app built with Next.js 14 App Router.</strong></p>
+### A modern event-discovery app built with Next.js 14 App Router
 
 <p>
-  <a href="https://even-to.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-View-a4f839?style=for-the-badge"></a>
+  <a href="https://even-to.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-View-a4f839?style=for-the-badge&labelColor=0f1015"></a>
+  &nbsp;
   <a href="https://github.com/HariYenuganti/evenTo"><img alt="Source" src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github"></a>
 </p>
+
+<p>
+  <a href="#highlights">Highlights</a> ·
+  <a href="#architecture-decisions">Architecture</a> ·
+  <a href="#tech-stack">Tech stack</a> ·
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="#local-development">Getting started</a>
+</p>
+
+<br />
 
 <img src="public/screenshots/events.png" alt="Discover events page with search, city, category, and date filters" width="900">
 
 </div>
 
+<br />
+
+---
+
 ## Highlights
 
-- **URL-driven filter state** — every search/filter writes to `searchParams`, so `/events?q=jazz&city=austin&category=MUSIC,COMEDY&from=2026-04-20` is a shareable link. See [src/components/events-filters.tsx](src/components/events-filters.tsx).
-- **Server Components + `unstable_cache`** for data fetching with tag-based invalidation — no client-side data libraries. See [src/lib/server-utils.ts](src/lib/server-utils.ts).
-- **Type-safe end-to-end**: Prisma → Zod-validated server actions → React. See [src/lib/validations.ts](src/lib/validations.ts) and [src/app/event/[slug]/actions.ts](src/app/event/[slug]/actions.ts).
-- **Transactional emails** via Resend + React Email components. Graceful degradation when `RESEND_API_KEY` is unset.
-- **Abuse-resistant bookings** — Upstash Ratelimit enforces 5 bookings/min per IP, with graceful no-op in dev. See [src/lib/rate-limit.ts](src/lib/rate-limit.ts).
-- **Tested**: one Playwright happy-path E2E covering the booking flow, running in CI against a Postgres service container. See [tests/booking.spec.ts](tests/booking.spec.ts) and [.github/workflows/ci.yml](.github/workflows/ci.yml).
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h4>Shareable filter URLs</h4>
+      <p>Every search and filter writes to <code>searchParams</code>, so <code>/events?q=jazz&amp;city=austin&amp;category=MUSIC,COMEDY</code> is a link you can paste anywhere.</p>
+      <sub><a href="src/components/events-filters.tsx">events-filters.tsx</a></sub>
+    </td>
+    <td width="33%" valign="top">
+      <h4>Server Components + cache tags</h4>
+      <p>Data fetching via <code>unstable_cache</code> with tag-based invalidation. No SWR, no React Query, no fetch on the client.</p>
+      <sub><a href="src/lib/server-utils.ts">server-utils.ts</a></sub>
+    </td>
+    <td width="33%" valign="top">
+      <h4>Type-safe end-to-end</h4>
+      <p>Prisma → Zod-validated server actions → React. One <code>BookingInput</code> type flows from schema to form.</p>
+      <sub><a href="src/lib/validations.ts">validations.ts</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h4>Transactional email</h4>
+      <p>Booking confirmations via Resend + React Email components. Gracefully no-ops when <code>RESEND_API_KEY</code> is unset.</p>
+      <sub><a href="src/app/event/%5Bslug%5D/actions.ts">actions.ts</a></sub>
+    </td>
+    <td valign="top">
+      <h4>Abuse-resistant writes</h4>
+      <p>Upstash Ratelimit enforces 5 bookings/min per IP on the server action. Falls back to a no-op in dev.</p>
+      <sub><a href="src/lib/rate-limit.ts">rate-limit.ts</a></sub>
+    </td>
+    <td valign="top">
+      <h4>E2E tested in CI</h4>
+      <p>Playwright happy-path spec runs against a Postgres service container on every PR.</p>
+      <sub><a href="tests/booking.spec.ts">booking.spec.ts</a> · <a href=".github/workflows/ci.yml">ci.yml</a></sub>
+    </td>
+  </tr>
+</table>
+
+---
 
 ## Architecture decisions
 
-**Why Server Components instead of SWR/React Query.**  The events list and detail pages are read-mostly, cache-friendly, and SEO-relevant. Pushing fetching to the server keeps the client bundle small, lets `unstable_cache` + revalidation tags handle staleness, and renders the first paint from HTML. Client Components stay scoped to interactive islands (the booking modal, the filter controls).
+> **Why Server Components, not SWR / React Query**
+>
+> The events list and detail pages are read-mostly, cache-friendly, and SEO-relevant. Pushing fetching to the server keeps the client bundle small, lets `unstable_cache` + revalidation tags handle staleness, and renders the first paint from HTML. Client Components stay scoped to interactive islands — the booking modal and filter controls.
 
-**Why a server action for booking, not an API route.**  The booking form is a single write that wants type safety from form → validator → DB. A server action passes a typed `BookingInput` straight to [`createBooking`](src/app/event/[slug]/actions.ts), Zod-validates on the server, and returns a discriminated union the modal renders directly. No fetch wrapper, no JSON serialization boilerplate, no separate OpenAPI contract to maintain.
+> **Why a server action for booking, not an API route**
+>
+> The booking form is a single write that wants type safety from form → validator → DB. A server action passes a typed `BookingInput` straight to [`createBooking`](src/app/event/[slug]/actions.ts), Zod-validates on the server, and returns a discriminated union the modal renders directly. No fetch wrapper, no JSON serialization, no separate OpenAPI contract.
 
-**Why `prisma db push` instead of migrations.**  The project has one deployment and a small seed. Migration history adds ceremony without yet buying anything — schema changes go through `db push --force-reset` in dev and CI, and the seed rebuilds from scratch. If the app ever gets real production data, switching to `migrate deploy` is a one-commit migration.
+> **Why `prisma db push`, not migrations**
+>
+> One deployment, small seed. Migration history adds ceremony without yet buying anything — schema changes go through `db push --force-reset` in dev and CI, and the seed rebuilds from scratch. If the app ever gets real production data, switching to `migrate deploy` is a one-commit migration.
+
+---
 
 ## Tech stack
 
-- **Framework**: [Next.js 14](https://nextjs.org) (App Router, Server Components, Server Actions)
-- **Language**: [TypeScript](https://www.typescriptlang.org)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com), [Framer Motion](https://www.framer.com/motion/)
-- **Database**: PostgreSQL + [Prisma](https://www.prisma.io)
-- **Validation**: [Zod](https://zod.dev)
-- **Email**: [Resend](https://resend.com) + [React Email](https://react.email)
-- **Rate limiting**: [Upstash Ratelimit](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) on Redis
-- **Date picker**: [react-day-picker](https://daypicker.dev)
-- **Testing**: [Playwright](https://playwright.dev) running in GitHub Actions against a Postgres service container
+<p align="center">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
+  <img alt="Zod" src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white">
+  <img alt="Resend" src="https://img.shields.io/badge/Resend-000000?style=for-the-badge&logo=resend&logoColor=white">
+  <img alt="Upstash" src="https://img.shields.io/badge/Upstash-00E9A3?style=for-the-badge&logo=upstash&logoColor=white">
+  <img alt="Playwright" src="https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white">
+  <img alt="Framer Motion" src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white">
+</p>
+
+<br />
+
+| Area | Tool |
+|---|---|
+| Framework | [Next.js 14](https://nextjs.org) — App Router, Server Components, Server Actions |
+| Language | [TypeScript](https://www.typescriptlang.org) |
+| Styling | [Tailwind CSS](https://tailwindcss.com) + [Framer Motion](https://www.framer.com/motion/) |
+| Database | [PostgreSQL](https://www.postgresql.org) via [Prisma](https://www.prisma.io) |
+| Validation | [Zod](https://zod.dev) |
+| Email | [Resend](https://resend.com) + [React Email](https://react.email) |
+| Rate limiting | [Upstash Ratelimit](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) on Redis |
+| Date picker | [react-day-picker](https://daypicker.dev) |
+| Testing | [Playwright](https://playwright.dev) in GitHub Actions against a Postgres service |
+
+---
 
 ## Screenshots
 
-| Home | Discover | Event detail |
-|------|----------|--------------|
-| <img src="public/screenshots/home.png" alt="Home page" width="280"> | <img src="public/screenshots/events.png" alt="Events discovery page" width="280"> | <img src="public/screenshots/event-detail.png" alt="Event detail with booking" width="280"> |
+<table>
+  <tr>
+    <td align="center" width="33%"><strong>Home</strong></td>
+    <td align="center" width="33%"><strong>Discover</strong></td>
+    <td align="center" width="33%"><strong>Event detail</strong></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/home.png" alt="Home page"></td>
+    <td><img src="public/screenshots/events.png" alt="Events discovery page"></td>
+    <td><img src="public/screenshots/event-detail.png" alt="Event detail with booking"></td>
+  </tr>
+</table>
+
+---
+
+## Local development
 
 <details>
-<summary>Local development</summary>
+<summary><strong>Setup, run, and test</strong></summary>
 
 ### Prerequisites
 
 - Node.js 18+
-- PostgreSQL
+- PostgreSQL (local or hosted)
 
-### Setup
+### Install
 
 ```bash
 git clone https://github.com/HariYenuganti/evenTo.git
@@ -64,38 +151,38 @@ cd evenTo
 npm install
 ```
 
-Create a `.env` file (see [.env.example](.env.example)):
+### Configure
+
+Copy [.env.example](.env.example) to `.env` and set `DATABASE_URL`. The rest are optional — they degrade gracefully when unset.
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/evento"
-# Optional — all services below degrade gracefully when unset
+
+# Optional
 RESEND_API_KEY=""
 UPSTASH_REDIS_REST_URL=""
 UPSTASH_REDIS_REST_TOKEN=""
 ```
 
-Push the schema and seed:
+### Initialize the database
 
 ```bash
 npx prisma db push
 npx prisma db seed
 ```
 
-Run the dev server:
+### Run
 
 ```bash
-npm run dev
-```
-
-### Tests
-
-```bash
-npm run test:e2e
+npm run dev         # http://localhost:3000
+npm run test:e2e    # Playwright E2E
+npm run lint
+npm run build
 ```
 
 ### Project layout
 
-```
+```text
 src/
 ├── app/              # App Router routes, layouts, server actions
 ├── components/       # UI (Server and Client Components)
@@ -103,9 +190,17 @@ src/
 └── emails/           # React Email templates
 prisma/
 ├── schema.prisma     # EventoEvent, Booking, EventCategory
-└── seed.ts           # Seed data
+└── seed.ts
 tests/
 └── booking.spec.ts   # Playwright E2E
+.github/workflows/
+└── ci.yml            # lint-and-build + test (Postgres service + Playwright)
 ```
 
 </details>
+
+<br />
+
+<div align="center">
+  <sub>Built by <a href="https://github.com/HariYenuganti">HariYenuganti</a> · <a href="https://even-to.vercel.app">Live demo</a></sub>
+</div>
