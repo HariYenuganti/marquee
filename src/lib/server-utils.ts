@@ -1,8 +1,11 @@
 import 'server-only';
 import { unstable_cache } from 'next/cache';
 import { notFound } from 'next/navigation';
+import { EventCategory } from '@prisma/client';
 import prisma from './db';
 import { capitalizeFirstLetter } from './utils';
+
+export const PAGE_SIZE = 6;
 
 export const getEvents = unstable_cache(
   async (city: string, page: number) => {
@@ -14,8 +17,8 @@ export const getEvents = unstable_cache(
       prisma.eventoEvent.findMany({
         where,
         orderBy: { date: 'asc' },
-        take: 6,
-        skip: (page - 1) * 6,
+        take: PAGE_SIZE,
+        skip: (page - 1) * PAGE_SIZE,
       }),
       prisma.eventoEvent.count({ where }),
     ]);
@@ -39,4 +42,58 @@ export const getEvent = unstable_cache(
   },
   ['event-detail'],
   { revalidate: 300, tags: ['events'] }
+);
+
+export type SearchEventsArgs = {
+  q?: string;
+  city?: string;
+  category: EventCategory[];
+  from?: Date;
+  to?: Date;
+  page: number;
+};
+
+export const searchEvents = unstable_cache(
+  async ({ q, city, category, from, to, page }: SearchEventsArgs) => {
+    const where = {
+      ...(q ? { name: { contains: q, mode: 'insensitive' as const } } : {}),
+      ...(city ? { city: capitalizeFirstLetter(city) } : {}),
+      ...(category.length > 0 ? { category: { in: category } } : {}),
+      ...(from || to
+        ? {
+            date: {
+              ...(from ? { gte: from } : {}),
+              ...(to ? { lte: to } : {}),
+            },
+          }
+        : {}),
+    };
+
+    const [events, totalCount] = await prisma.$transaction([
+      prisma.eventoEvent.findMany({
+        where,
+        orderBy: { date: 'asc' },
+        take: PAGE_SIZE,
+        skip: (page - 1) * PAGE_SIZE,
+      }),
+      prisma.eventoEvent.count({ where }),
+    ]);
+
+    return { events, totalCount };
+  },
+  ['events-search'],
+  { revalidate: 300, tags: ['events'] }
+);
+
+export const getDistinctCities = unstable_cache(
+  async () => {
+    const rows = await prisma.eventoEvent.findMany({
+      distinct: ['city'],
+      select: { city: true },
+      orderBy: { city: 'asc' },
+    });
+    return rows.map((r) => r.city);
+  },
+  ['events-distinct-cities'],
+  { revalidate: 3600, tags: ['events'] }
 );

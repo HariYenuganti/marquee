@@ -29,3 +29,29 @@
   scrollbar-width: thin;
   scrollbar-color: #0f1015 rgba(255, 255, 255, 0.1);
 }
+
+/* react-day-picker dark theme overrides */
+.rdp-dark {
+  --rdp-accent-color: #a4f839;
+  --rdp-accent-background-color: rgba(164, 248, 57, 0.18);
+  --rdp-background-color: transparent;
+  --rdp-range_middle-color: #0f1015;
+  color: #fff;
+}
+.rdp-dark .rdp-day_button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.rdp-dark .rdp-selected .rdp-day_button {
+  color: #0f1015;
+  font-weight: 600;
+}
+.rdp-dark .rdp-chevron {
+  fill: #fff;
+}
+.rdp-dark .rdp-caption_label,
+.rdp-dark .rdp-weekday {
+  color: rgba(255, 255, 255, 0.7);
+}
+.rdp-dark .rdp-today:not(.rdp-selected) .rdp-day_button {
+  color: #a4f839;
+}
