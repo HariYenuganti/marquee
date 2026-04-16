@@ -1,117 +1,111 @@
 <div align="center">
 
-  <h1>Evento - Find Events Around You</h1>
+<h1>Evento</h1>
 
-  <p>
-    A modern, responsive web application for discovering events in your area. Built with Next.js, Server Components, and performance in mind.
-  </p>
+<p><strong>A modern event-discovery app built with Next.js 14 App Router.</strong></p>
 
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#tech-stack">Tech Stack</a> •
-    <a href="#getting-started">Getting Started</a>
-  </p>
+<p>
+  <a href="https://even-to.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-View-a4f839?style=for-the-badge"></a>
+  <a href="https://github.com/HariYenuganti/evenTo"><img alt="Source" src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github"></a>
+</p>
 
-[![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+<img src="public/screenshots/events.png" alt="Discover events page with search, city, category, and date filters" width="900">
 
 </div>
 
-<br />
+## Highlights
 
-## 🚀 Features
+- **URL-driven filter state** — every search/filter writes to `searchParams`, so `/events?q=jazz&city=austin&category=MUSIC,COMEDY&from=2026-04-20` is a shareable link. See [src/components/events-filters.tsx](src/components/events-filters.tsx).
+- **Server Components + `unstable_cache`** for data fetching with tag-based invalidation — no client-side data libraries. See [src/lib/server-utils.ts](src/lib/server-utils.ts).
+- **Type-safe end-to-end**: Prisma → Zod-validated server actions → React. See [src/lib/validations.ts](src/lib/validations.ts) and [src/app/event/[slug]/actions.ts](src/app/event/[slug]/actions.ts).
+- **Transactional emails** via Resend + React Email components. Graceful degradation when `RESEND_API_KEY` is unset.
+- **Abuse-resistant bookings** — Upstash Ratelimit enforces 5 bookings/min per IP, with graceful no-op in dev. See [src/lib/rate-limit.ts](src/lib/rate-limit.ts).
+- **Tested**: one Playwright happy-path E2E covering the booking flow, running in CI against a Postgres service container. See [tests/booking.spec.ts](tests/booking.spec.ts) and [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
-<div align="center">
-  <table>
-    <tr>
-      <td>🏙️ <b>City Browsing</b></td>
-      <td>Browse events specially curated for Austin and Seattle with specific content.</td>
-    </tr>
-    <tr>
-      <td>↔️ <b>Pagination</b></td>
-      <td>Navigate through large lists of events efficiently with server-side pagination.</td>
-    </tr>
-    <tr>
-      <td>⚡ <b>Performance</b></td>
-      <td>Built with Next.js Server Components for fast initial loads and SEO optimization.</td>
-    </tr>
-     <tr>
-      <td>🎨 <b>Modern UI</b></td>
-      <td>Beautiful, responsive design using Tailwind CSS and Framer Motion animations.</td>
-    </tr>
-  </table>
-</div>
+## Architecture decisions
 
-## 🛠️ Tech Stack
+**Why Server Components instead of SWR/React Query.**  The events list and detail pages are read-mostly, cache-friendly, and SEO-relevant. Pushing fetching to the server keeps the client bundle small, lets `unstable_cache` + revalidation tags handle staleness, and renders the first paint from HTML. Client Components stay scoped to interactive islands (the booking modal, the filter controls).
 
-This project uses a modern full-stack approach to ensure scalability and type safety.
+**Why a server action for booking, not an API route.**  The booking form is a single write that wants type safety from form → validator → DB. A server action passes a typed `BookingInput` straight to [`createBooking`](src/app/event/[slug]/actions.ts), Zod-validates on the server, and returns a discriminated union the modal renders directly. No fetch wrapper, no JSON serialization boilerplate, no separate OpenAPI contract to maintain.
 
-- **Core**: [Next.js 14](https://nextjs.org/) (App Router), [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/)
-- **Database & ORM**:
-  - **PostgreSQL**: Robust relational database.
-  - **Prisma**: Type-safe ORM for database interactions and schema management.
-- **Validation**: [Zod](https://zod.dev/)
-- **Data Fetching**: Server Components & `unstable_cache` for efficient data caching.
+**Why `prisma db push` instead of migrations.**  The project has one deployment and a small seed. Migration history adds ceremony without yet buying anything — schema changes go through `db push --force-reset` in dev and CI, and the seed rebuilds from scratch. If the app ever gets real production data, switching to `migrate deploy` is a one-commit migration.
 
-## � Getting Started
+## Tech stack
 
-Follow these steps to set up the project locally.
+- **Framework**: [Next.js 14](https://nextjs.org) (App Router, Server Components, Server Actions)
+- **Language**: [TypeScript](https://www.typescriptlang.org)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com), [Framer Motion](https://www.framer.com/motion/)
+- **Database**: PostgreSQL + [Prisma](https://www.prisma.io)
+- **Validation**: [Zod](https://zod.dev)
+- **Email**: [Resend](https://resend.com) + [React Email](https://react.email)
+- **Rate limiting**: [Upstash Ratelimit](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) on Redis
+- **Date picker**: [react-day-picker](https://daypicker.dev)
+- **Testing**: [Playwright](https://playwright.dev) running in GitHub Actions against a Postgres service container
+
+## Screenshots
+
+| Home | Discover | Event detail |
+|------|----------|--------------|
+| <img src="public/screenshots/home.png" alt="Home page" width="280"> | <img src="public/screenshots/events.png" alt="Events discovery page" width="280"> | <img src="public/screenshots/event-detail.png" alt="Event detail with booking" width="280"> |
+
+<details>
+<summary>Local development</summary>
 
 ### Prerequisites
 
-- **Node.js** (v18 or higher)
-- **npm** or **yarn**
-- **PostgreSQL** database instance
+- Node.js 18+
+- PostgreSQL
 
-### Installation
-
-1.  **Clone the repository**
-
-    ```bash
-    git clone https://github.com/StartHereCode/evento.git
-    cd evento
-    ```
-
-2.  **Install dependencies**
-
-    ```bash
-    npm install
-    ```
-
-3.  **Set up Environment Variables**
-
-    Create a `.env` file in the root directory and add your database connection string:
-
-    ```env
-    DATABASE_URL="postgresql://user:password@localhost:5432/evento_db?schema=public"
-    ```
-
-4.  **Database Setup**
-
-    Push the schema to your database and seed it with initial data:
-
-    ```bash
-    npx prisma db push
-    npx prisma db seed
-    ```
-
-5.  **Run the development server**
-    ```bash
-    npm run dev
-    ```
-    Open `http://localhost:3000` in your browser.
-
-## 📂 Project Structure
+### Setup
 
 ```bash
-src/
-├── app/              # Next.js App Router pages and layouts
-├── components/       # Reusable UI components
-├── lib/              # Utilities, hooks, and server-side logic
-├── prisma/           # Database schema and seed script
-└── public/           # Static assets
+git clone https://github.com/HariYenuganti/evenTo.git
+cd evenTo
+npm install
 ```
+
+Create a `.env` file (see [.env.example](.env.example)):
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/evento"
+# Optional — all services below degrade gracefully when unset
+RESEND_API_KEY=""
+UPSTASH_REDIS_REST_URL=""
+UPSTASH_REDIS_REST_TOKEN=""
+```
+
+Push the schema and seed:
+
+```bash
+npx prisma db push
+npx prisma db seed
+```
+
+Run the dev server:
+
+```bash
+npm run dev
+```
+
+### Tests
+
+```bash
+npm run test:e2e
+```
+
+### Project layout
+
+```
+src/
+├── app/              # App Router routes, layouts, server actions
+├── components/       # UI (Server and Client Components)
+├── lib/              # db client, validations, server utils, rate limiter
+└── emails/           # React Email templates
+prisma/
+├── schema.prisma     # EventoEvent, Booking, EventCategory
+└── seed.ts           # Seed data
+tests/
+└── booking.spec.ts   # Playwright E2E
+```
+
+</details>
