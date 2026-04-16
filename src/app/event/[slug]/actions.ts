@@ -1,7 +1,9 @@
 'use server';
 
+import { headers } from 'next/headers';
 import prisma from '@/lib/db';
 import { bookingSchema, BookingInput } from '@/lib/validations';
+import { bookingRateLimit } from '@/lib/rate-limit';
 import { Resend } from 'resend';
 import { render } from '@react-email/render';
 import BookingConfirmationEmail from '@/emails/booking-confirmation';
@@ -19,6 +21,20 @@ type BookingResult =
 export async function createBooking(
   input: BookingInput
 ): Promise<BookingResult> {
+  if (bookingRateLimit) {
+    const ip =
+      headers().get('x-forwarded-for')?.split(',')[0]?.trim() ??
+      headers().get('x-real-ip') ??
+      'anonymous';
+    const { success } = await bookingRateLimit.limit(ip);
+    if (!success) {
+      return {
+        success: false,
+        error: 'Too many bookings. Please try again in a minute.',
+      };
+    }
+  }
+
   // Validate input on the server
   const parsed = bookingSchema.safeParse(input);
   if (!parsed.success) {
