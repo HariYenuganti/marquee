@@ -9,8 +9,8 @@ export default function SearchForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!searchText.trim()) return;
-    router.push(`/events/${searchText.trim()}`);
+    const trimmed = searchText.trim();
+    router.push(trimmed ? `/events?q=${encodeURIComponent(trimmed)}` : '/events');
   };
 
   const handleSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,8 +23,8 @@ export default function SearchForm() {
         className="w-full h-16 rounded-lg bg-white/[7%] px-6 outline-none ring-accent/50 transition focus:ring-2 focus:bg-white/10"
         value={searchText}
         onChange={handleSearchTextChange}
-        placeholder="Search events in my city..."
-        aria-label="Search events by city"
+        placeholder="Search events…"
+        aria-label="Search events by name"
         spellCheck={false}
       />
     </form>
