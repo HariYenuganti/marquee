@@ -1,6 +1,8 @@
 import prisma from '@/lib/db';
 import { MetadataRoute } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const events = await prisma.eventoEvent.findMany({
     select: { slug: true, updatedAt: true },
