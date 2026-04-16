@@ -25,6 +25,16 @@ export default function BookTicketsModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    setState('form');
+    setError('');
+    setQuantity(1);
+    setName('');
+    setEmail('');
+    setBookingId(null);
+  }, []);
+
   // Focus trap + escape to close
   useEffect(() => {
     if (!isOpen) return;
@@ -44,16 +54,6 @@ export default function BookTicketsModal({
       document.body.style.overflow = '';
     };
   }, [isOpen, handleClose]);
-
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-    setState('form');
-    setError('');
-    setQuantity(1);
-    setName('');
-    setEmail('');
-    setBookingId(null);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
