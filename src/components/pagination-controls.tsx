@@ -16,7 +16,7 @@ export default function PaginationControls({
   return (
     <section className="flex justify-between w-full">
       {previousPath ? (
-        <Link href={previousPath} className={btnStyle}>
+        <Link href={previousPath} className={btnStyle} aria-label="Go to previous page">
           <ArrowLeftIcon />
           Previous
         </Link>
@@ -24,7 +24,7 @@ export default function PaginationControls({
         <div />
       )}
       {nextPath && (
-        <Link href={nextPath} className={btnStyle}>
+        <Link href={nextPath} className={btnStyle} aria-label="Go to next page">
           Next
           <ArrowRightIcon />
         </Link>

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     template: '%s | Evento',
   },
   description: 'Browse more than 10,000 events around the world',
+  metadataBase: new URL('https://even-to.vercel.app'),
   openGraph: {
     title: 'Evento - Find Events Around You',
     description: 'Browse more than 10,000 events around the world',

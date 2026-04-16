@@ -16,7 +16,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between border-b border-white/10 h-14 px-3 sm:px-9">
       <Logo />
-      <nav className="h-full">
+      <nav className="h-full" aria-label="Main navigation">
         <ul className="flex  gap-x-6 h-full text-sm">
           {routes.map((route) => (
             <li
@@ -29,7 +29,12 @@ export default function Header() {
                 }
               )}
             >
-              <Link href={route.path}>{route.name}</Link>
+              <Link
+                href={route.path}
+                aria-current={activePathname === route.path ? 'page' : undefined}
+              >
+                {route.name}
+              </Link>
 
               {activePathname === route.path && (
                 <motion.div

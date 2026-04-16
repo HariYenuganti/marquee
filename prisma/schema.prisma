@@ -22,4 +22,7 @@ model EventoEvent {
   description   String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  @@index([city])
+  @@index([date])
 }
