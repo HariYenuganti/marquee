@@ -1,3 +1,4 @@
+import BookTicketsModal from '@/components/book-tickets-modal';
 import H1 from '@/components/h1';
 import { getEvent } from '@/lib/server-utils';
 import Image from 'next/image';
@@ -64,9 +65,7 @@ export default async function EventPage({ params }: EventPageProps) {
             <p className="whitespace-nowrap text-xl text-white/75">
               Organized by <span className="italic">{event.organizerName}</span>
             </p>
-            <button className="bg-white/20 text-lg capitalize bg-blur mt-5 lg:mt-auto w-[95vw] rounded-md border-white/10 border-2 sm:w-full py-2 state-effects ">
-              Book tickets
-            </button>
+            <BookTicketsModal eventId={event.id} eventName={event.name} />
           </div>
         </div>
       </section>
