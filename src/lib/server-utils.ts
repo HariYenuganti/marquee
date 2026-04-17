@@ -14,13 +14,13 @@ export const getEvents = unstable_cache(
     };
 
     const [events, totalCount] = await prisma.$transaction([
-      prisma.eventoEvent.findMany({
+      prisma.event.findMany({
         where,
         orderBy: { date: 'asc' },
         take: PAGE_SIZE,
         skip: (page - 1) * PAGE_SIZE,
       }),
-      prisma.eventoEvent.count({ where }),
+      prisma.event.count({ where }),
     ]);
 
     return { events, totalCount };
@@ -31,7 +31,7 @@ export const getEvents = unstable_cache(
 
 export const getEvent = unstable_cache(
   async (slug: string) => {
-    const event = await prisma.eventoEvent.findUnique({
+    const event = await prisma.event.findUnique({
       where: { slug },
     });
     if (!event) {
@@ -70,13 +70,13 @@ export const searchEvents = unstable_cache(
     };
 
     const [events, totalCount] = await prisma.$transaction([
-      prisma.eventoEvent.findMany({
+      prisma.event.findMany({
         where,
         orderBy: { date: 'asc' },
         take: PAGE_SIZE,
         skip: (page - 1) * PAGE_SIZE,
       }),
-      prisma.eventoEvent.count({ where }),
+      prisma.event.count({ where }),
     ]);
 
     return { events, totalCount };
@@ -87,7 +87,7 @@ export const searchEvents = unstable_cache(
 
 export const getDistinctCities = unstable_cache(
   async () => {
-    const rows = await prisma.eventoEvent.findMany({
+    const rows = await prisma.event.findMany({
       distinct: ['city'],
       select: { city: true },
       orderBy: { city: 'asc' },

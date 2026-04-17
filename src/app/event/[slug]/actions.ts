@@ -22,9 +22,10 @@ export async function createBooking(
   input: BookingInput
 ): Promise<BookingResult> {
   if (bookingRateLimit) {
+    const h = await headers();
     const ip =
-      headers().get('x-forwarded-for')?.split(',')[0]?.trim() ??
-      headers().get('x-real-ip') ??
+      h.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+      h.get('x-real-ip') ??
       'anonymous';
     const { success } = await bookingRateLimit.limit(ip);
     if (!success) {
@@ -43,7 +44,7 @@ export async function createBooking(
 
   try {
     // Verify the event exists
-    const event = await prisma.eventoEvent.findUnique({
+    const event = await prisma.event.findUnique({
       where: { id: parsed.data.eventId },
     });
 
@@ -80,7 +81,7 @@ export async function createBooking(
           })
         );
         await resend.emails.send({
-          from: 'Evento <onboarding@resend.dev>',
+          from: 'Marquee <onboarding@resend.dev>',
           to: parsed.data.email,
           subject: `Booking confirmed: ${event.name}`,
           html,
