@@ -11,6 +11,9 @@ type BookTicketsModalProps = {
 
 type ModalState = 'form' | 'submitting' | 'success';
 
+const INPUT =
+  'w-full h-11 rounded-lg bg-white/[0.04] border border-white/10 px-3.5 text-sm text-ink placeholder:text-ink/40 outline-none transition focus:border-ember/60 focus:bg-white/[0.07] focus:ring-2 focus:ring-ember/25';
+
 export default function BookTicketsModal({
   eventId,
   eventName,
@@ -35,16 +38,14 @@ export default function BookTicketsModal({
     setBookingId(null);
   }, []);
 
-  // Focus trap + escape to close
+  // Focus the first field + ESC to close + lock body scroll while open
   useEffect(() => {
     if (!isOpen) return;
 
     nameInputRef.current?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleClose();
-      }
+      if (e.key === 'Escape') handleClose();
     };
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
@@ -59,7 +60,6 @@ export default function BookTicketsModal({
     e.preventDefault();
     setError('');
 
-    // Client-side validation
     const parsed = bookingSchema.safeParse({ name, email, quantity, eventId });
     if (!parsed.success) {
       setError(parsed.error.errors[0].message);
@@ -83,9 +83,15 @@ export default function BookTicketsModal({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="bg-white/20 text-lg capitalize bg-blur mt-5 lg:mt-auto w-[95vw] rounded-md border-white/10 border-2 sm:w-full py-2 state-effects"
+        className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ember px-6 py-3.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-[#0B0B0D] transition hover:brightness-110 active:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2 focus-visible:ring-offset-base"
       >
         Book tickets
+        <span
+          aria-hidden
+          className="transition-transform group-hover:translate-x-0.5"
+        >
+          →
+        </span>
       </button>
 
       {isOpen && (
@@ -96,7 +102,10 @@ export default function BookTicketsModal({
           }}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div
+            className="absolute inset-0 bg-base/80 backdrop-blur-md"
+            aria-hidden
+          />
 
           {/* Modal */}
           <div
@@ -104,61 +113,73 @@ export default function BookTicketsModal({
             role="dialog"
             aria-modal="true"
             aria-label={`Book tickets for ${eventName}`}
-            className="relative bg-gray-900 border border-white/10 rounded-xl w-full max-w-md p-6 shadow-2xl"
+            className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#121216] p-7 shadow-2xl shadow-black/60"
           >
             {state === 'success' ? (
-              // Success state
-              <div className="text-center py-4">
-                <div className="text-5xl mb-4">
+              // ----------------------------- Success
+              <div className="py-2 text-center">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-ember/40 bg-ember/10">
                   <svg
-                    className="w-16 h-16 mx-auto text-accent"
+                    className="h-6 w-6 text-ember"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={2.2}
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-semibold mb-2">
-                  Booking confirmed!
+                <div className="mb-2 text-[11px] uppercase tracking-[0.22em] text-ember">
+                  You&rsquo;re on the list
+                </div>
+                <h2 className="font-display text-[28px] italic leading-tight text-ink">
+                  See you there.
                 </h2>
-                <p className="text-white/75 mb-1">
+                <p className="mx-auto mt-4 max-w-xs text-sm text-ink/70">
                   {quantity} {quantity === 1 ? 'ticket' : 'tickets'} for{' '}
-                  <span className="text-white font-medium">{eventName}</span>
+                  <span className="text-ink">{eventName}</span>
                 </p>
-                <p className="text-white/50 text-sm mb-1">
+                <p className="mt-3 text-xs text-ink/45">
                   Confirmation sent to {email}
                 </p>
-                <p className="text-white/40 text-xs mb-6">
+                <p className="mt-1 text-xs text-ink/35">
                   Booking #{bookingId}
                 </p>
                 <button
                   onClick={handleClose}
-                  className="bg-accent text-gray-900 font-semibold px-6 py-2 rounded-md hover:bg-accent/90 transition"
+                  className="mt-7 inline-flex items-center gap-2 rounded-xl bg-ember px-6 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-[#0B0B0D] transition hover:brightness-110"
                 >
                   Done
                 </button>
               </div>
             ) : (
-              // Form state
+              // ----------------------------- Form
               <>
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">Book tickets</h2>
+                <div className="mb-1 flex items-start justify-between">
+                  <div>
+                    <div className="text-[11px] uppercase tracking-[0.22em] text-ember">
+                      Reserve
+                    </div>
+                    <h2 className="mt-1 font-display text-2xl italic text-ink">
+                      Book tickets
+                    </h2>
+                  </div>
                   <button
                     onClick={handleClose}
-                    className="text-white/50 hover:text-white transition"
-                    aria-label="Close modal"
+                    className="rounded-md p-1 text-ink/45 transition hover:bg-white/[0.04] hover:text-ink"
+                    aria-label="Close"
                   >
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden
                     >
                       <path
                         strokeLinecap="round"
@@ -170,12 +191,13 @@ export default function BookTicketsModal({
                   </button>
                 </div>
 
-                <p className="text-white/60 text-sm mb-6">{eventName}</p>
+                <p className="mt-4 mb-6 truncate text-sm text-ink/55">
+                  {eventName}
+                </p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Quantity selector */}
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
-                    <label className="block text-sm text-white/75 mb-2">
+                    <label className="mb-2 block text-[11px] uppercase tracking-[0.16em] text-ink/55">
                       Number of tickets
                     </label>
                     <div className="flex gap-2">
@@ -184,11 +206,11 @@ export default function BookTicketsModal({
                           key={num}
                           type="button"
                           onClick={() => setQuantity(num)}
-                          className={`w-10 h-10 rounded-md text-sm font-medium transition ${
+                          className={
                             quantity === num
-                              ? 'bg-accent text-gray-900'
-                              : 'bg-white/10 text-white hover:bg-white/20'
-                          }`}
+                              ? 'h-11 w-11 rounded-lg bg-ember text-[13px] font-semibold text-[#0B0B0D] transition'
+                              : 'h-11 w-11 rounded-lg border border-white/10 bg-white/[0.02] text-[13px] text-ink/75 transition hover:border-ember/40 hover:text-ink'
+                          }
                         >
                           {num}
                         </button>
@@ -196,11 +218,10 @@ export default function BookTicketsModal({
                     </div>
                   </div>
 
-                  {/* Name */}
                   <div>
                     <label
                       htmlFor="booking-name"
-                      className="block text-sm text-white/75 mb-2"
+                      className="mb-2 block text-[11px] uppercase tracking-[0.16em] text-ink/55"
                     >
                       Full name
                     </label>
@@ -210,49 +231,50 @@ export default function BookTicketsModal({
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      placeholder="John Doe"
+                      placeholder="Your name"
                       required
-                      className="w-full px-4 py-2 rounded-md bg-white/[7%] border border-white/10 outline-none ring-accent/50 transition focus:ring-2 focus:bg-white/10 text-sm"
+                      className={INPUT}
                     />
                   </div>
 
-                  {/* Email */}
                   <div>
                     <label
                       htmlFor="booking-email"
-                      className="block text-sm text-white/75 mb-2"
+                      className="mb-2 block text-[11px] uppercase tracking-[0.16em] text-ink/55"
                     >
-                      Email address
+                      Email
                     </label>
                     <input
                       id="booking-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="john@example.com"
+                      placeholder="you@example.com"
                       required
-                      className="w-full px-4 py-2 rounded-md bg-white/[7%] border border-white/10 outline-none ring-accent/50 transition focus:ring-2 focus:bg-white/10 text-sm"
+                      className={INPUT}
                     />
                   </div>
 
-                  {/* Error */}
                   {error && (
-                    <p className="text-red-400 text-sm" role="alert">
+                    <p
+                      className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-300"
+                      role="alert"
+                    >
                       {error}
                     </p>
                   )}
 
-                  {/* Submit */}
                   <button
                     type="submit"
                     disabled={state === 'submitting'}
-                    className="w-full bg-accent text-gray-900 font-semibold py-2.5 rounded-md hover:bg-accent/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-ember px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.14em] text-[#0B0B0D] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {state === 'submitting' ? (
-                      <span className="flex items-center justify-center gap-2">
+                      <>
                         <svg
-                          className="animate-spin h-4 w-4"
+                          className="h-4 w-4 animate-spin"
                           viewBox="0 0 24 24"
+                          aria-hidden
                         >
                           <circle
                             className="opacity-25"
@@ -269,10 +291,14 @@ export default function BookTicketsModal({
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                           />
                         </svg>
-                        Confirming...
-                      </span>
+                        Confirming…
+                      </>
                     ) : (
-                      `Confirm ${quantity} ${quantity === 1 ? 'ticket' : 'tickets'}`
+                      <>
+                        Confirm {quantity}{' '}
+                        {quantity === 1 ? 'ticket' : 'tickets'}
+                        <span aria-hidden>→</span>
+                      </>
                     )}
                   </button>
                 </form>

@@ -8,9 +8,9 @@ export default function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse h-4 w-[550px] rounded-md bg-white/5',
+        'animate-pulse rounded-md bg-white/[0.04] h-4 w-full',
         className
       )}
-    ></div>
+    />
   );
 }

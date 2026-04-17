@@ -2,56 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-.state-effects {
-  @apply hover:scale-105 focus:scale-105 active:scale-[1.02] transition;
+/* ---------------------------------------------------------------------------
+   Marquee design tokens
+   --------------------------------------------------------------------------- */
+:root {
+  --base: #0b0b0d; /* warm charcoal */
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.07);
+  --ink: #f6f1e8; /* warm off-white */
+  --ink-70: rgba(246, 241, 232, 0.7);
+  --ink-55: rgba(246, 241, 232, 0.55);
+  --ink-35: rgba(246, 241, 232, 0.35);
+  --ember: #ea8b4a;
+  --ember-soft: rgba(234, 139, 74, 0.18);
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.14);
 }
 
-/* SCROLLBAR STYLING */
-/* Chrome, Edge, and Safari */
+body {
+  background: var(--base);
+  color: var(--ink);
+}
+
+.state-effects {
+  @apply transition-all duration-300;
+}
+.state-effects:hover,
+.state-effects:focus-visible {
+  transform: translateY(-2px);
+}
+.state-effects:active {
+  transform: translateY(0);
+}
+
+/* Selection */
+::selection {
+  background: var(--ember);
+  color: var(--base);
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar
+   --------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 10px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #0f1015;
+  background: var(--base);
 }
-
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--hairline);
+  border-radius: 999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--hairline-strong);
 }
-
-/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #0f1015 rgba(255, 255, 255, 0.1);
+  scrollbar-color: var(--hairline) var(--base);
 }
 
-/* react-day-picker dark theme overrides */
+/* ---------------------------------------------------------------------------
+   react-day-picker dark theme overrides — Marquee
+   --------------------------------------------------------------------------- */
 .rdp-dark {
-  --rdp-accent-color: #a4f839;
-  --rdp-accent-background-color: rgba(164, 248, 57, 0.18);
+  --rdp-accent-color: var(--ember);
+  --rdp-accent-background-color: var(--ember-soft);
   --rdp-background-color: transparent;
-  --rdp-range_middle-color: #0f1015;
-  color: #fff;
+  --rdp-range_middle-color: var(--base);
+  color: var(--ink);
 }
 .rdp-dark .rdp-day_button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.06);
 }
 .rdp-dark .rdp-selected .rdp-day_button {
-  color: #0f1015;
+  color: var(--base);
   font-weight: 600;
 }
 .rdp-dark .rdp-chevron {
-  fill: #fff;
+  fill: var(--ink);
 }
 .rdp-dark .rdp-caption_label,
 .rdp-dark .rdp-weekday {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--ink-70);
 }
 .rdp-dark .rdp-today:not(.rdp-selected) .rdp-day_button {
-  color: #a4f839;
+  color: var(--ember);
 }

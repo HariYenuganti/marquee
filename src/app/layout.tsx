@@ -1,28 +1,42 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Fraunces } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Container from '@/components/container';
+import { siteUrl } from '@/lib/utils';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  display: 'swap',
+  style: ['normal', 'italic'],
+  variable: '--font-fraunces',
+});
 
 export const metadata: Metadata = {
   title: {
-    default: 'Evento - Find Events Around You',
-    template: '%s | Evento',
+    default: 'Marquee — Tonight\u2019s lineup, tonight\u2019s town',
+    template: '%s · Marquee',
   },
-  description: 'Browse more than 10,000 events around the world',
-  metadataBase: new URL('https://even-to.vercel.app'),
+  description:
+    'A curated index of shows, sets, readings, and late-night pop-ups — updated as the day unfolds.',
+  metadataBase: new URL(siteUrl()),
   openGraph: {
-    title: 'Evento - Find Events Around You',
-    description: 'Browse more than 10,000 events around the world',
+    title: 'Marquee — Tonight\u2019s lineup, tonight\u2019s town',
+    description:
+      'A curated index of shows, sets, readings, and late-night pop-ups — updated as the day unfolds.',
     type: 'website',
+    siteName: 'Marquee',
   },
   twitter: {
     card: 'summary_large_image',
   },
-  authors: [{ name: 'HariYenuganti' }],
 };
 
 export default function RootLayout({
@@ -31,10 +45,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} bg-gray-950 text-white overflow-y-scroll `}
-      >
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+      <body className="font-sans bg-base text-ink overflow-y-scroll antialiased">
         <Container>
           <Header />
           {children}

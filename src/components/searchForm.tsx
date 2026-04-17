@@ -10,23 +10,31 @@ export default function SearchForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = searchText.trim();
-    router.push(trimmed ? `/events?q=${encodeURIComponent(trimmed)}` : '/events');
-  };
-
-  const handleSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+    router.push(
+      trimmed ? `/events?q=${encodeURIComponent(trimmed)}` : '/events'
+    );
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full sm:w-[580px]" role="search">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full sm:w-[620px] flex gap-3"
+      role="search"
+    >
       <input
-        className="w-full h-16 rounded-lg bg-white/[7%] px-6 outline-none ring-accent/50 transition focus:ring-2 focus:bg-white/10"
+        className="flex-1 h-14 sm:h-16 rounded-xl bg-white/[0.04] border border-white/10 px-5 sm:px-6 text-ink placeholder:text-ink/40 outline-none transition focus:bg-white/[0.07] focus:border-ember/60 focus:ring-2 focus:ring-ember/30"
         value={searchText}
-        onChange={handleSearchTextChange}
-        placeholder="Search events…"
-        aria-label="Search events by name"
+        onChange={(e) => setSearchText(e.target.value)}
+        placeholder="Search events, venues, artists…"
+        aria-label="Search events"
         spellCheck={false}
       />
+      <button
+        type="submit"
+        className="h-14 sm:h-16 px-6 sm:px-8 rounded-xl bg-ember text-base font-semibold text-[#0B0B0D] tracking-[0.08em] uppercase text-xs transition hover:brightness-110 active:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-ember focus-visible:ring-offset-2 focus-visible:ring-offset-base"
+      >
+        Search
+      </button>
     </form>
   );
 }

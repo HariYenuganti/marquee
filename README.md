@@ -1,13 +1,13 @@
 <div align="center">
 
-# Evento
+# Marquee
 
-### A modern event-discovery app built with Next.js 14 App Router
+### A hand-kept index of nights worth leaving the house for — built on Next.js 16
 
 <p>
-  <a href="https://even-to.vercel.app"><img alt="Live Demo" src="https://img.shields.io/badge/Live_Demo-View-a4f839?style=for-the-badge&labelColor=0f1015"></a>
+  <a href="https://github.com/HariYenuganti/marquee"><img alt="Source" src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github"></a>
   &nbsp;
-  <a href="https://github.com/HariYenuganti/evenTo"><img alt="Source" src="https://img.shields.io/badge/Source-GitHub-181717?style=for-the-badge&logo=github"></a>
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-000?style=for-the-badge&logo=nextdotjs&logoColor=%23EA8B4A">
 </p>
 
 <p>
@@ -20,7 +20,7 @@
 
 <br />
 
-<img src="public/screenshots/events.png" alt="Discover events page with search, city, category, and date filters" width="900">
+<img src="public/screenshots/events.png" alt="The Index — search, city, category, and date filters" width="900">
 
 </div>
 
@@ -38,20 +38,20 @@
       <sub><a href="src/components/events-filters.tsx">events-filters.tsx</a></sub>
     </td>
     <td width="33%" valign="top">
-      <h4>Server Components + cache tags</h4>
-      <p>Data fetching via <code>unstable_cache</code> with tag-based invalidation. No SWR, no React Query, no fetch on the client.</p>
+      <h4>Server Components + tag-keyed cache</h4>
+      <p>Data fetching via <code>unstable_cache</code> with tag-based invalidation. No SWR, no React Query, no fetch on the client — the first paint is HTML.</p>
       <sub><a href="src/lib/server-utils.ts">server-utils.ts</a></sub>
     </td>
     <td width="33%" valign="top">
       <h4>Type-safe end-to-end</h4>
-      <p>Prisma → Zod-validated server actions → React. One <code>BookingInput</code> type flows from schema to form.</p>
+      <p>Prisma 6 → Zod-validated server actions → React 19. One <code>BookingInput</code> type flows from schema to form.</p>
       <sub><a href="src/lib/validations.ts">validations.ts</a></sub>
     </td>
   </tr>
   <tr>
     <td valign="top">
       <h4>Transactional email</h4>
-      <p>Booking confirmations via Resend + React Email components. Gracefully no-ops when <code>RESEND_API_KEY</code> is unset.</p>
+      <p>Booking confirmations via Resend + React Email components, styled to the Marquee brand. Gracefully no-ops when <code>RESEND_API_KEY</code> is unset.</p>
       <sub><a href="src/app/event/%5Bslug%5D/actions.ts">actions.ts</a></sub>
     </td>
     <td valign="top">
@@ -73,7 +73,7 @@
 
 > **Why Server Components, not SWR / React Query**
 >
-> The events list and detail pages are read-mostly, cache-friendly, and SEO-relevant. Pushing fetching to the server keeps the client bundle small, lets `unstable_cache` + revalidation tags handle staleness, and renders the first paint from HTML. Client Components stay scoped to interactive islands — the booking modal and filter controls.
+> The events list and detail pages are read-mostly, cache-friendly, and SEO-relevant. Pushing fetching to the server keeps the client bundle small, lets `unstable_cache` + revalidation tags handle staleness, and renders the first paint from HTML. Client components stay scoped to interactive islands — the booking modal and filter controls.
 
 > **Why a server action for booking, not an API route**
 >
@@ -83,15 +83,20 @@
 >
 > One deployment, small seed. Migration history adds ceremony without yet buying anything — schema changes go through `db push --force-reset` in dev and CI, and the seed rebuilds from scratch. If the app ever gets real production data, switching to `migrate deploy` is a one-commit migration.
 
+> **Why `NEXT_PUBLIC_SITE_URL`, not hardcoded**
+>
+> Deployment URLs are an env-var concern, not a source-of-truth-in-code concern. [`siteUrl()`](src/lib/utils.ts) reads `NEXT_PUBLIC_SITE_URL` with a localhost fallback and is referenced from `metadata`, `sitemap`, and `robots`. Rename the Vercel project once — no find/replace required.
+
 ---
 
 ## Tech stack
 
 <p align="center">
-  <img alt="Next.js" src="https://img.shields.io/badge/Next.js_14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+  <img alt="React 19" src="https://img.shields.io/badge/React_19-149ECA?style=for-the-badge&logo=react&logoColor=white">
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
   <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
-  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
+  <img alt="Prisma 6" src="https://img.shields.io/badge/Prisma_6-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
   <img alt="Zod" src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white">
   <img alt="Resend" src="https://img.shields.io/badge/Resend-000000?style=for-the-badge&logo=resend&logoColor=white">
@@ -104,15 +109,33 @@
 
 | Area | Tool |
 |---|---|
-| Framework | [Next.js 14](https://nextjs.org) — App Router, Server Components, Server Actions |
+| Framework | [Next.js 16](https://nextjs.org) — App Router, Server Components, Server Actions, Turbopack |
+| UI | [React 19](https://react.dev) |
 | Language | [TypeScript](https://www.typescriptlang.org) |
-| Styling | [Tailwind CSS](https://tailwindcss.com) + [Framer Motion](https://www.framer.com/motion/) |
-| Database | [PostgreSQL](https://www.postgresql.org) via [Prisma](https://www.prisma.io) |
+| Styling | [Tailwind CSS](https://tailwindcss.com) + [Fraunces](https://fonts.google.com/specimen/Fraunces) & [Inter](https://fonts.google.com/specimen/Inter) via `next/font` |
+| Motion | [Framer Motion](https://www.framer.com/motion/) for layout-tracking nav + scroll-triggered cards |
+| Database | [PostgreSQL](https://www.postgresql.org) via [Prisma 6](https://www.prisma.io) |
 | Validation | [Zod](https://zod.dev) |
 | Email | [Resend](https://resend.com) + [React Email](https://react.email) |
 | Rate limiting | [Upstash Ratelimit](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview) on Redis |
-| Date picker | [react-day-picker](https://daypicker.dev) |
 | Testing | [Playwright](https://playwright.dev) in GitHub Actions against a Postgres service |
+
+---
+
+## Design system
+
+The Marquee aesthetic is coded in two files so it&rsquo;s cheap to re-theme:
+
+- [`tailwind.config.ts`](tailwind.config.ts) — `base`, `ink`, `ember` color tokens; `font-sans`/`font-display` families.
+- [`src/app/globals.css`](src/app/globals.css) — CSS variables, scrollbar, react-day-picker overrides.
+
+| Token | Value | Role |
+|---|---|---|
+| `base` | `#0B0B0D` | Warm charcoal — full-bleed background |
+| `ink` | `#F6F1E8` | Warm off-white — primary text |
+| `ember` | `#EA8B4A` | Single accent — CTAs, eyebrows, badges |
+| `font-display` | Fraunces | Serif headlines, quotes, wordmarks |
+| `font-sans` | Inter | Body, UI chrome |
 
 ---
 
@@ -120,14 +143,14 @@
 
 <table>
   <tr>
-    <td align="center" width="33%"><strong>Home</strong></td>
-    <td align="center" width="33%"><strong>Discover</strong></td>
-    <td align="center" width="33%"><strong>Event detail</strong></td>
+    <td align="center" width="33%"><strong>Tonight</strong></td>
+    <td align="center" width="33%"><strong>The Index</strong></td>
+    <td align="center" width="33%"><strong>Event</strong></td>
   </tr>
   <tr>
-    <td><img src="public/screenshots/home.png" alt="Home page"></td>
-    <td><img src="public/screenshots/events.png" alt="Events discovery page"></td>
-    <td><img src="public/screenshots/event-detail.png" alt="Event detail with booking"></td>
+    <td><img src="public/screenshots/home.png" alt="Tonight — the landing page"></td>
+    <td><img src="public/screenshots/events.png" alt="The Index — events discovery"></td>
+    <td><img src="public/screenshots/event-detail.png" alt="Event detail with cinematic hero and booking sidebar"></td>
   </tr>
 </table>
 
@@ -140,14 +163,14 @@
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - PostgreSQL (local or hosted)
 
 ### Install
 
 ```bash
-git clone https://github.com/HariYenuganti/evenTo.git
-cd evenTo
+git clone https://github.com/HariYenuganti/marquee.git
+cd marquee
 npm install
 ```
 
@@ -156,7 +179,8 @@ npm install
 Copy [.env.example](.env.example) to `.env` and set `DATABASE_URL`. The rest are optional — they degrade gracefully when unset.
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/evento"
+DATABASE_URL="postgresql://user:password@localhost:5432/marquee"
+NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
 # Optional
 RESEND_API_KEY=""
@@ -186,11 +210,11 @@ npm run build
 src/
 ├── app/              # App Router routes, layouts, server actions
 ├── components/       # UI (Server and Client Components)
-├── lib/              # db client, validations, server utils, rate limiter
+├── lib/              # db client, validations, server utils, rate limiter, siteUrl()
 └── emails/           # React Email templates
 prisma/
-├── schema.prisma     # EventoEvent, Booking, EventCategory
-└── seed.ts
+├── schema.prisma     # Event, Booking, EventCategory
+└── seed.ts           # 26 events across 3 cities
 tests/
 └── booking.spec.ts   # Playwright E2E
 .github/workflows/
@@ -202,5 +226,5 @@ tests/
 <br />
 
 <div align="center">
-  <sub>Built by <a href="https://github.com/HariYenuganti">HariYenuganti</a> · <a href="https://even-to.vercel.app">Live demo</a></sub>
+  <sub>Built by <a href="https://github.com/HariYenuganti">HariYenuganti</a></sub>
 </div>

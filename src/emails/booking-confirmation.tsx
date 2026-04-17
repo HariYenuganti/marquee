@@ -28,27 +28,24 @@ export default function BookingConfirmationEmail({
   return (
     <Html>
       <Head />
-      <Preview>
-        Your booking for {eventName} is confirmed!
-      </Preview>
+      <Preview>{`You're on the list for ${eventName} — booking #${bookingId}`}</Preview>
       <Body style={body}>
         <Container style={container}>
-          {/* Header */}
+          {/* Wordmark */}
           <Section style={header}>
-            <Text style={logo}>EVENTO</Text>
+            <Text style={logo}>
+              <span style={logoDot}>■</span>
+              <span style={logoWord}>Marquee</span>
+            </Text>
           </Section>
 
-          {/* Checkmark */}
-          <Section style={checkmarkSection}>
-            <Text style={checkmark}>✓</Text>
-          </Section>
+          {/* Eyebrow + headline */}
+          <Text style={eyebrow}>You&rsquo;re on the list</Text>
+          <Heading style={heading}>See you there.</Heading>
 
-          {/* Main content */}
-          <Heading style={heading}>Booking confirmed!</Heading>
-          <Text style={greeting}>Hey {name},</Text>
           <Text style={paragraph}>
-            Your tickets for <strong>{eventName}</strong> have been confirmed.
-            Here are your booking details:
+            Hey {name}, your tickets for <strong style={strongInk}>{eventName}</strong>{' '}
+            are confirmed. Show this email at the door.
           </Text>
 
           {/* Booking details card */}
@@ -72,17 +69,17 @@ export default function BookingConfirmationEmail({
           </Section>
 
           <Text style={paragraph}>
-            Show this email at the venue entrance. We hope you have an amazing
-            time!
+            Doors open 30 minutes before showtime. If plans change, reply to
+            this email and we&rsquo;ll sort it out.
           </Text>
 
           {/* Footer */}
           <Hr style={divider} />
           <Text style={footer}>
-            Evento - Find events around you
+            Marquee — a hand-kept index of nights worth leaving the house for.
           </Text>
           <Text style={footerSmall}>
-            This is an automated confirmation email. Please do not reply.
+            This is an automated confirmation email.
           </Text>
         </Container>
       </Body>
@@ -90,117 +87,130 @@ export default function BookingConfirmationEmail({
   );
 }
 
-// Styles
+// -- styles -----------------------------------------------------------------
+
+const EMBER = '#EA8B4A';
+const BASE = '#0B0B0D';
+const INK = '#F6F1E8';
+const INK_70 = 'rgba(246, 241, 232, 0.70)';
+const INK_45 = 'rgba(246, 241, 232, 0.45)';
+const HAIRLINE = 'rgba(255, 255, 255, 0.10)';
+
 const body = {
-  backgroundColor: '#030712',
+  backgroundColor: BASE,
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+  margin: 0,
+  padding: 0,
 };
 
 const container = {
   margin: '0 auto',
-  padding: '40px 20px',
-  maxWidth: '480px',
+  padding: '48px 24px',
+  maxWidth: '520px',
 };
 
 const header = {
-  textAlign: 'center' as const,
-  marginBottom: '32px',
+  marginBottom: '40px',
 };
 
 const logo = {
-  color: '#a4f839',
-  fontSize: '24px',
-  fontWeight: 'bold' as const,
-  letterSpacing: '2px',
-  margin: '0',
-};
-
-const checkmarkSection = {
-  textAlign: 'center' as const,
-  marginBottom: '16px',
-};
-
-const checkmark = {
   display: 'inline-block',
-  width: '48px',
-  height: '48px',
-  lineHeight: '48px',
-  borderRadius: '50%',
-  backgroundColor: '#a4f839',
-  color: '#030712',
-  fontSize: '24px',
-  fontWeight: 'bold' as const,
-  textAlign: 'center' as const,
-  margin: '0 auto',
+  margin: 0,
+  verticalAlign: 'middle',
+};
+
+const logoDot = {
+  color: EMBER,
+  fontSize: '18px',
+  marginRight: '10px',
+  letterSpacing: '-2px',
+  verticalAlign: 'middle',
+};
+
+const logoWord = {
+  color: INK,
+  fontFamily: 'Georgia, "Times New Roman", serif',
+  fontStyle: 'italic' as const,
+  fontSize: '22px',
+  letterSpacing: '-0.5px',
+  verticalAlign: 'middle',
+};
+
+const eyebrow = {
+  color: EMBER,
+  fontSize: '11px',
+  textTransform: 'uppercase' as const,
+  letterSpacing: '3px',
+  margin: '0 0 12px',
 };
 
 const heading = {
-  color: '#ffffff',
-  fontSize: '28px',
-  fontWeight: 'bold' as const,
-  textAlign: 'center' as const,
-  margin: '0 0 24px',
-};
-
-const greeting = {
-  color: '#ffffff',
-  fontSize: '16px',
-  margin: '0 0 8px',
+  color: INK,
+  fontFamily: 'Georgia, "Times New Roman", serif',
+  fontStyle: 'italic' as const,
+  fontSize: '38px',
+  fontWeight: 400 as const,
+  lineHeight: '1.05',
+  margin: '0 0 28px',
 };
 
 const paragraph = {
-  color: 'rgba(255, 255, 255, 0.75)',
+  color: INK_70,
   fontSize: '15px',
   lineHeight: '24px',
   margin: '0 0 24px',
 };
 
+const strongInk = {
+  color: INK,
+  fontWeight: 600 as const,
+};
+
 const detailsCard = {
-  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+  backgroundColor: 'rgba(255, 255, 255, 0.03)',
   borderRadius: '12px',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
-  padding: '24px',
-  marginBottom: '24px',
+  border: `1px solid ${HAIRLINE}`,
+  padding: '26px',
+  marginBottom: '28px',
 };
 
 const detailLabel = {
-  color: 'rgba(255, 255, 255, 0.5)',
-  fontSize: '12px',
+  color: INK_45,
+  fontSize: '11px',
   textTransform: 'uppercase' as const,
-  letterSpacing: '1px',
+  letterSpacing: '1.6px',
   margin: '0 0 4px',
 };
 
 const detailValue = {
-  color: '#ffffff',
+  color: INK,
   fontSize: '16px',
-  fontWeight: '500' as const,
-  margin: '0 0 16px',
+  fontWeight: 500 as const,
+  margin: '0 0 18px',
 };
 
 const bookingRef = {
-  color: '#a4f839',
-  fontSize: '20px',
-  fontWeight: 'bold' as const,
+  color: EMBER,
+  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+  fontSize: '18px',
+  fontWeight: 600 as const,
   margin: '0',
 };
 
 const divider = {
-  borderColor: 'rgba(255, 255, 255, 0.1)',
-  margin: '16px 0',
+  borderColor: HAIRLINE,
+  margin: '18px 0',
 };
 
 const footer = {
-  color: 'rgba(255, 255, 255, 0.5)',
-  fontSize: '13px',
-  textAlign: 'center' as const,
-  margin: '0 0 4px',
+  color: INK_45,
+  fontSize: '12px',
+  margin: '0 0 6px',
 };
 
 const footerSmall = {
-  color: 'rgba(255, 255, 255, 0.3)',
+  color: 'rgba(246, 241, 232, 0.3)',
   fontSize: '11px',
-  textAlign: 'center' as const,
   margin: '0',
 };
