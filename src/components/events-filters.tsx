@@ -6,7 +6,7 @@ import { DayPicker, type DateRange } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { EventCategory } from '@prisma/client';
 import { EVENT_CATEGORIES } from '@/lib/validations';
-import { capitalizeFirstLetter, cn } from '@/lib/utils';
+import { citySlug, cn } from '@/lib/utils';
 
 type EventsFiltersProps = {
   cities: string[];
@@ -153,12 +153,8 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
             All cities
           </option>
           {cities.map((c) => (
-            <option
-              key={c}
-              value={c.toLowerCase()}
-              className="bg-[#0B0B0D]"
-            >
-              {capitalizeFirstLetter(c)}
+            <option key={c} value={citySlug(c)} className="bg-[#0B0B0D]">
+              {c}
             </option>
           ))}
         </select>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import SearchForm from '@/components/searchForm';
 import H1 from '@/components/h1';
 import { getDistinctCities } from '@/lib/server-utils';
-import { capitalizeFirstLetter } from '@/lib/utils';
+import { capitalizeFirstLetter, citySlug } from '@/lib/utils';
 
 export default async function Home() {
   const cities = await getDistinctCities().catch(() => [] as string[]);
@@ -63,7 +63,7 @@ export default async function Home() {
                   </span>
                 )}
                 <Link
-                  href={`/events/${city.toLowerCase()}`}
+                  href={`/events/${citySlug(city)}`}
                   className="transition hover:text-ink"
                 >
                   {capitalizeFirstLetter(city.toLowerCase())}

@@ -17,6 +17,27 @@ export function capitalizeFirstLetter(string: string) {
 }
 
 /**
+ * City URL helpers.
+ *
+ * DB stores cities as display strings ("New York"). URLs use kebab-case
+ * slugs ("new-york"). These two helpers normalize in both directions so a
+ * multi-word city round-trips cleanly between URL and DB.
+ */
+export function citySlug(city: string): string {
+  return city.trim().toLowerCase().replace(/\s+/g, '-');
+}
+
+export function cityFromSlug(slug: string): string {
+  return slug
+    .trim()
+    .toLowerCase()
+    .split('-')
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+/**
  * Canonical site URL. Driven by `NEXT_PUBLIC_SITE_URL` (set per deployment)
  * with a localhost fallback so local dev and CI don't need it.
  *

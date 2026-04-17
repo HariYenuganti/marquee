@@ -3,14 +3,14 @@ import { unstable_cache } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { EventCategory } from '@prisma/client';
 import prisma from './db';
-import { capitalizeFirstLetter } from './utils';
+import { cityFromSlug } from './utils';
 
-export const PAGE_SIZE = 6;
+export const PAGE_SIZE = 12;
 
 export const getEvents = unstable_cache(
   async (city: string, page: number) => {
     const where = {
-      city: city === 'all' ? undefined : capitalizeFirstLetter(city),
+      city: city === 'all' ? undefined : cityFromSlug(city),
     };
 
     const [events, totalCount] = await prisma.$transaction([
@@ -57,7 +57,7 @@ export const searchEvents = unstable_cache(
   async ({ q, city, category, from, to, page }: SearchEventsArgs) => {
     const where = {
       ...(q ? { name: { contains: q, mode: 'insensitive' as const } } : {}),
-      ...(city ? { city: capitalizeFirstLetter(city) } : {}),
+      ...(city ? { city: cityFromSlug(city) } : {}),
       ...(category.length > 0 ? { category: { in: category } } : {}),
       ...(from || to
         ? {

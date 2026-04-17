@@ -3,7 +3,7 @@ import H1 from '@/components/h1';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import Loading from './loading';
-import { capitalizeFirstLetter } from '@/lib/utils';
+import { cityFromSlug, citySlug } from '@/lib/utils';
 import { getDistinctCities } from '@/lib/server-utils';
 import { z } from 'zod';
 
@@ -21,12 +21,9 @@ type EventsPageProps = MetadataProps & {
 
 export async function generateMetadata({ params }: MetadataProps) {
   const { city: cityParam } = await params;
-  const city = cityParam.toLowerCase();
+  const slug = cityParam.toLowerCase();
   return {
-    title:
-      city === 'all'
-        ? 'All events'
-        : `${capitalizeFirstLetter(city)} · The Index`,
+    title: slug === 'all' ? 'All events' : `${cityFromSlug(slug)} · The Index`,
   };
 }
 
@@ -37,22 +34,19 @@ export default async function EventsPage({
   searchParams,
 }: EventsPageProps) {
   const { city: cityParam } = await params;
-  const city = cityParam.toLowerCase();
+  const slug = cityParam.toLowerCase();
   const sp = await searchParams;
   const parsedPage = pageNumberSchema.safeParse(sp.page);
   if (!parsedPage.success) {
     throw new Error('Invalid page number');
   }
 
-  // Drive allowlist from seeded data so adding a city to the seed unlocks it
-  // here automatically.
+  // Drive the allowlist from seeded data so adding a city to the seed unlocks
+  // its page automatically. Compare on the slug form — "New York" → "new-york".
   const seededCities = await getDistinctCities();
-  const allowed = new Set([
-    'all',
-    ...seededCities.map((c) => c.toLowerCase()),
-  ]);
+  const allowedSlugs = new Set(['all', ...seededCities.map(citySlug)]);
 
-  if (!allowed.has(city)) {
+  if (!allowedSlugs.has(slug)) {
     return (
       <main className="flex min-h-[80vh] flex-col items-center px-6 pb-24 pt-24 sm:px-12 sm:pt-28">
         <div className="flex w-full max-w-2xl flex-col items-center gap-6 text-center">
@@ -60,7 +54,7 @@ export default async function EventsPage({
             Not on the bill yet
           </span>
           <H1 className="max-w-[18ch] text-center">
-            No listings in {capitalizeFirstLetter(city)}.
+            No listings in {cityFromSlug(slug)}.
           </H1>
           <p className="text-ink/55">
             Marquee is slowly rolling out city by city. In the meantime, browse
@@ -70,10 +64,10 @@ export default async function EventsPage({
             {seededCities.map((c) => (
               <Link
                 key={c}
-                href={`/events/${c.toLowerCase()}`}
+                href={`/events/${citySlug(c)}`}
                 className="rounded-full border border-white/10 px-5 py-2 text-[12px] uppercase tracking-[0.16em] text-ink transition hover:border-ember/60 hover:text-ember"
               >
-                {capitalizeFirstLetter(c.toLowerCase())}
+                {c}
               </Link>
             ))}
             <Link
@@ -89,20 +83,20 @@ export default async function EventsPage({
   }
 
   const title =
-    city === 'all' ? 'Every city.' : `${capitalizeFirstLetter(city)}.`;
+    slug === 'all' ? 'Every city.' : `${cityFromSlug(slug)}.`;
 
   return (
     <main className="flex min-h-[90vh] flex-col items-center gap-14 px-6 pb-24 pt-20 sm:px-12 sm:pt-28 lg:px-20">
       <header className="flex w-full max-w-6xl flex-col gap-5">
         <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-ember">
           <span className="h-px w-8 bg-ember/60" aria-hidden />
-          {city === 'all' ? 'The full index' : 'Tonight in town'}
+          {slug === 'all' ? 'The full index' : 'Tonight in town'}
         </div>
         <H1 className="max-w-[18ch]">{title}</H1>
       </header>
 
-      <Suspense key={city + parsedPage.data} fallback={<Loading />}>
-        <EventsList city={city} page={parsedPage.data} />
+      <Suspense key={slug + parsedPage.data} fallback={<Loading />}>
+        <EventsList city={slug} page={parsedPage.data} />
       </Suspense>
     </main>
   );
