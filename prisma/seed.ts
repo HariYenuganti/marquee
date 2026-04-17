@@ -69,7 +69,7 @@ const events = [
   },
   {
     id: 5,
-    name: 'East Side Screenwriters&rsquo; Circle',
+    name: 'East Side Screenwriters’ Circle',
     slug: 'east-side-screenwriters-circle',
     city: 'Austin',
     location: 'Cheer Up Charlies (back room)',
@@ -139,7 +139,7 @@ const events = [
   // ------------------------------- Seattle
   {
     id: 10,
-    name: 'Ballard Farmers&rsquo; Pop-Up',
+    name: 'Ballard Farmers’ Pop-Up',
     slug: 'ballard-farmers-pop-up',
     city: 'Seattle',
     location: 'Conor Byrne Pub',
@@ -189,7 +189,7 @@ const events = [
     imageUrl: 'https://picsum.photos/seed/fremont-writers-live-reading/1200/800',
     category: 'ART' as const,
     description:
-      "Five local writers reading new work — three fiction, one essay, one the author called a &lsquo;letter, I guess&rsquo;. Q&A after, drinks throughout.",
+      'Five local writers reading new work — three fiction, one essay, one the author called a ‘letter, I guess’. Q&A after, drinks throughout.',
   },
   {
     id: 14,
@@ -366,7 +366,7 @@ const events = [
       'https://picsum.photos/seed/village-comedy-cellar-new-faces/1200/800',
     category: 'COMEDY' as const,
     description:
-      "A &lsquo;new faces&rsquo; lineup — seven comics, eight minutes each. One of them will be working the late show at the Beacon in two years; you can tell your friends.",
+      'A ‘new faces’ lineup — seven comics, eight minutes each. One of them will be working the late show at the Beacon in two years; you can tell your friends.',
   },
 ];
 
