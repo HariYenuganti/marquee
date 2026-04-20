@@ -53,6 +53,21 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
+  // Keep the local search input in sync with the URL's `q` param. Covers the
+  // back/forward button and any external navigation (e.g. clicking a popular
+  // city on the home page) — without this, the input and URL can drift apart.
+  //
+  // React pattern for "resync state on prop change": compare the prop to the
+  // last value we synced from during render, and call setState inline. React
+  // bails out of the in-progress render and restarts with the new state — no
+  // extra effect pass, no stale DOM blink.
+  // See https://react.dev/reference/react/useState#storing-information-from-previous-renders
+  const [lastSyncedQ, setLastSyncedQ] = useState(initial.q);
+  if (initial.q !== lastSyncedQ) {
+    setLastSyncedQ(initial.q);
+    setQ(initial.q ?? '');
+  }
+
   const pushParams = useCallback(
     (patch: Record<string, string | null>) => {
       const next = new URLSearchParams(searchParams.toString());
@@ -66,13 +81,6 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
     },
     [router, searchParams]
   );
-
-  // Keep the local search input in sync with the URL's `q` param. Covers the
-  // back/forward button and any external navigation (e.g. clicking a popular
-  // city on the home page) — without this, the input and URL can drift apart.
-  useEffect(() => {
-    setQ(initial.q ?? '');
-  }, [initial.q]);
 
   // Debounce the search box
   useEffect(() => {
