@@ -15,11 +15,12 @@ export default async function EventsList({ city, page = 1 }: EventsListProps) {
     totalCount > page * 6 ? `/events/${city}?page=${page + 1}` : null;
 
   return (
-    <section className="max-w-[1100px] flex flex-wrap gap-10 justify-center px-[20px]">
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} />
-      ))}
-
+    <section className="w-full max-w-6xl px-5">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+      </div>
       <PaginationControls previousPath={previousPath} nextPath={nextPath} />
     </section>
   );

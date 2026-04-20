@@ -22,7 +22,7 @@ enum EventCategory {
   WORKSHOP
 }
 
-model EventoEvent {
+model Event {
   id            Int           @id @default(autoincrement())
   name          String
   slug          String        @unique
@@ -48,7 +48,7 @@ model Booking {
   email     String
   quantity  Int
   eventId   Int
-  event     EventoEvent  @relation(fields: [eventId], references: [id])
+  event     Event  @relation(fields: [eventId], references: [id])
   createdAt DateTime     @default(now())
 
   @@index([eventId])

@@ -6,7 +6,7 @@ import { DayPicker, type DateRange } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { EventCategory } from '@prisma/client';
 import { EVENT_CATEGORIES } from '@/lib/validations';
-import { capitalizeFirstLetter, cn } from '@/lib/utils';
+import { citySlug, cn } from '@/lib/utils';
 
 type EventsFiltersProps = {
   cities: string[];
@@ -41,6 +41,10 @@ function formatDateLabel(from?: Date, to?: Date) {
   return 'Any dates';
 }
 
+// Shared input styling — reused by search, select, and date-picker trigger.
+const FIELD =
+  'h-12 rounded-xl bg-white/[0.04] border border-white/10 px-4 text-ink placeholder:text-ink/40 outline-none transition focus:border-ember/60 focus:ring-2 focus:ring-ember/25 focus:bg-white/[0.07]';
+
 export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,6 +52,21 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
   const [q, setQ] = useState(initial.q ?? '');
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const datePickerRef = useRef<HTMLDivElement>(null);
+
+  // Keep the local search input in sync with the URL's `q` param. Covers the
+  // back/forward button and any external navigation (e.g. clicking a popular
+  // city on the home page) — without this, the input and URL can drift apart.
+  //
+  // React pattern for "resync state on prop change": compare the prop to the
+  // last value we synced from during render, and call setState inline. React
+  // bails out of the in-progress render and restarts with the new state — no
+  // extra effect pass, no stale DOM blink.
+  // See https://react.dev/reference/react/useState#storing-information-from-previous-renders
+  const [lastSyncedQ, setLastSyncedQ] = useState(initial.q);
+  if (initial.q !== lastSyncedQ) {
+    setLastSyncedQ(initial.q);
+    setQ(initial.q ?? '');
+  }
 
   const pushParams = useCallback(
     (patch: Record<string, string | null>) => {
@@ -121,32 +140,36 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
       ? { from: initial.from, to: initial.to }
       : undefined;
 
+  const dateActive = !!(initial.from || initial.to);
+
   return (
     <section
       aria-label="Event filters"
-      className="w-full max-w-[1100px] flex flex-col gap-4 px-5"
+      className="flex w-full max-w-6xl flex-col gap-5 px-5"
     >
-      <div className="flex flex-col sm:flex-row gap-3 w-full">
+      {/* Row 1: text / city / date */}
+      <div className="flex w-full flex-col gap-3 sm:flex-row">
         <input
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search events…"
-          aria-label="Search events by name"
-          className="flex-1 h-12 rounded-md bg-white/[7%] px-4 outline-none ring-accent/50 transition focus:ring-2 focus:bg-white/10"
+          placeholder="Search events, venues, artists…"
+          aria-label="Search events"
+          spellCheck={false}
+          className={cn(FIELD, 'flex-1')}
         />
         <select
           value={initial.city ?? ''}
           onChange={(e) => handleCityChange(e.target.value)}
           aria-label="Filter by city"
-          className="h-12 rounded-md bg-white/[7%] px-3 outline-none ring-accent/50 transition focus:ring-2 focus:bg-white/10 text-white sm:w-48"
+          className={cn(FIELD, 'sm:w-52', 'cursor-pointer')}
         >
-          <option value="" className="bg-gray-900">
+          <option value="" className="bg-[#0B0B0D]">
             All cities
           </option>
           {cities.map((c) => (
-            <option key={c} value={c.toLowerCase()} className="bg-gray-900">
-              {capitalizeFirstLetter(c)}
+            <option key={c} value={citySlug(c)} className="bg-[#0B0B0D]">
+              {c}
             </option>
           ))}
         </select>
@@ -157,14 +180,15 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
             aria-expanded={datePickerOpen}
             aria-label="Filter by date range"
             className={cn(
-              'h-12 rounded-md bg-white/[7%] px-4 outline-none ring-accent/50 transition hover:bg-white/10 focus:ring-2 text-sm sm:w-56 w-full text-left',
-              (initial.from || initial.to) && 'text-accent'
+              FIELD,
+              'w-full cursor-pointer text-left sm:w-60',
+              dateActive && 'text-ember border-ember/40 bg-ember/[0.06]'
             )}
           >
             {formatDateLabel(initial.from, initial.to)}
           </button>
           {datePickerOpen && (
-            <div className="absolute z-30 mt-2 right-0 rounded-lg border border-white/10 bg-gray-900 p-3 shadow-2xl">
+            <div className="absolute right-0 z-30 mt-2 rounded-2xl border border-white/10 bg-[#0F0F12] p-3 shadow-2xl shadow-black/50">
               <DayPicker
                 mode="range"
                 selected={selectedRange}
@@ -176,7 +200,7 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
                 <button
                   type="button"
                   onClick={() => handleRangeSelect(undefined)}
-                  className="mt-2 w-full text-sm text-white/60 hover:text-white transition"
+                  className="mt-2 w-full rounded-md py-2 text-sm text-ink/60 transition hover:bg-white/[0.04] hover:text-ink"
                 >
                   Clear dates
                 </button>
@@ -186,6 +210,7 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
         </div>
       </div>
 
+      {/* Row 2: category pills */}
       <div className="flex flex-wrap gap-2">
         {EVENT_CATEGORIES.map((cat) => {
           const active = initial.category.includes(cat);
@@ -196,10 +221,10 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
               onClick={() => toggleCategory(cat)}
               aria-pressed={active}
               className={cn(
-                'px-3 py-1.5 rounded-full text-sm font-medium transition',
+                'rounded-full px-3.5 py-1.5 text-[12px] uppercase tracking-[0.14em] transition',
                 active
-                  ? 'bg-accent text-gray-900'
-                  : 'bg-white/10 text-white hover:bg-white/20'
+                  ? 'bg-ember text-[#0B0B0D] font-semibold shadow-[0_8px_30px_-12px_rgba(234,139,74,0.6)]'
+                  : 'border border-white/10 bg-white/[0.02] text-ink/70 hover:border-ember/40 hover:text-ink'
               )}
             >
               {CATEGORY_LABELS[cat]}
@@ -212,7 +237,7 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
         <button
           type="button"
           onClick={clearAll}
-          className="self-start text-sm text-white/60 hover:text-white transition"
+          className="self-start text-[12px] uppercase tracking-[0.16em] text-ink/55 transition hover:text-ember"
         >
           Clear all filters
         </button>

@@ -16,20 +16,31 @@ test.afterAll(async () => {
 test('user can book tickets for an event', async ({ page }) => {
   await page.goto('/events/austin');
 
-  await page.getByRole('link').filter({ has: page.locator('h2') }).first().click();
+  // Event cards are <article> inside a <Link>; h3 holds the event name.
+  await page
+    .getByRole('link')
+    .filter({ has: page.locator('h3') })
+    .first()
+    .click();
   await expect(page).toHaveURL(/\/event\/[a-z0-9-]+/);
 
-  await page.getByRole('button', { name: 'Book tickets' }).click();
+  // Two "Book tickets" buttons render — one inline on the detail page (primary
+  // CTA) and one on the sidebar. Clicking the first opens the modal.
+  await page.getByRole('button', { name: /book tickets/i }).first().click();
 
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
 
   await dialog.getByRole('button', { name: '2', exact: true }).click();
   await dialog.getByLabel('Full name').fill('Test User');
-  await dialog.getByLabel('Email address').fill(TEST_EMAIL);
+  await dialog.getByLabel('Email').fill(TEST_EMAIL);
 
   await dialog.getByRole('button', { name: /confirm 2 tickets/i }).click();
 
-  await expect(dialog.getByText('Booking confirmed!')).toBeVisible();
+  // Success state — Marquee copy replaces "Booking confirmed!" with an eyebrow
+  // + italic headline, plus the booking reference.
+  // Eyebrow uses a curly apostrophe (U+2019), so match the apostrophe-free tail.
+  await expect(dialog.getByText(/on the list/i)).toBeVisible();
+  await expect(dialog.getByText(/see you there\./i)).toBeVisible();
   await expect(dialog.getByText(/booking #\d+/i)).toBeVisible();
 });
