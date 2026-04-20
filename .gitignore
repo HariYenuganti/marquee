@@ -35,6 +35,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# claude tooling (local dev-server config, scheduler locks, per-machine state)
+.claude/
+
+# one-off design preview from the rebrand work; opened directly in a browser
+preview-design.html
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
