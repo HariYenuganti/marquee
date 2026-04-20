@@ -67,6 +67,13 @@ export default function EventsFilters({ cities, initial }: EventsFiltersProps) {
     [router, searchParams]
   );
 
+  // Keep the local search input in sync with the URL's `q` param. Covers the
+  // back/forward button and any external navigation (e.g. clicking a popular
+  // city on the home page) — without this, the input and URL can drift apart.
+  useEffect(() => {
+    setQ(initial.q ?? '');
+  }, [initial.q]);
+
   // Debounce the search box
   useEffect(() => {
     const current = searchParams.get('q') ?? '';
