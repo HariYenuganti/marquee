@@ -39,7 +39,8 @@ test('user can book tickets for an event', async ({ page }) => {
 
   // Success state — Marquee copy replaces "Booking confirmed!" with an eyebrow
   // + italic headline, plus the booking reference.
-  await expect(dialog.getByText(/you're on the list/i)).toBeVisible();
+  // Eyebrow uses a curly apostrophe (U+2019), so match the apostrophe-free tail.
+  await expect(dialog.getByText(/on the list/i)).toBeVisible();
   await expect(dialog.getByText(/see you there\./i)).toBeVisible();
   await expect(dialog.getByText(/booking #\d+/i)).toBeVisible();
 });
