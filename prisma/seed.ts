@@ -368,6 +368,446 @@ const events = [
     description:
       'A ‘new faces’ lineup — seven comics, eight minutes each. One of them will be working the late show at the Beacon in two years; you can tell your friends.',
   },
+
+  // ------------------------------- Austin (second batch)
+  {
+    id: 27,
+    name: 'Tejano Sunday at the White Horse',
+    slug: 'tejano-sunday-at-the-white-horse',
+    city: 'Austin',
+    location: 'The White Horse',
+    date: '2030-06-16T22:00:00.000Z',
+    organizerName: 'East Side Tejano Society',
+    imageUrl:
+      'https://picsum.photos/seed/tejano-sunday-at-the-white-horse/1200/800',
+    category: 'MUSIC' as const,
+    description:
+      'Sunday afternoon tejano, conjunto, and two-step lessons for anyone who hasn\'t danced in a while. Free cover before six, $5 after.\n\nThe band rotates weekly; the dance floor doesn\'t.',
+  },
+  {
+    id: 28,
+    name: 'Food Truck Atlas: Barton Springs',
+    slug: 'food-truck-atlas-barton-springs',
+    city: 'Austin',
+    location: 'Zilker Park Lawn',
+    date: '2030-07-20T17:00:00.000Z',
+    organizerName: 'Austin Food & Wine Alliance',
+    imageUrl:
+      'https://picsum.photos/seed/food-truck-atlas-barton-springs/1200/800',
+    category: 'FOOD' as const,
+    description:
+      'Twenty-two trucks, one lawn, a punch-card you fill by trying a bite from each. Beer and margaritas from a long central bar, live band off to one side.\n\nBring a blanket. No pets.',
+  },
+  {
+    id: 29,
+    name: 'Longform Writing Retreat',
+    slug: 'longform-writing-retreat',
+    city: 'Austin',
+    location: 'Paramount Theatre (upstairs studios)',
+    date: '2030-09-07T15:00:00.000Z',
+    organizerName: 'The Texas Book Project',
+    imageUrl: 'https://picsum.photos/seed/longform-writing-retreat/1200/800',
+    category: 'WORKSHOP' as const,
+    description:
+      'A one-day intensive on writing at length — three guided blocks, a working lunch, and a fireside with a published essayist. Limit twelve; coffee bottomless.',
+  },
+  {
+    id: 30,
+    name: 'Barton Creek Sunrise Yoga',
+    slug: 'barton-creek-sunrise-yoga',
+    city: 'Austin',
+    location: 'Barton Creek Greenbelt',
+    date: '2030-08-16T12:00:00.000Z',
+    organizerName: 'Still Hour Studio',
+    imageUrl: 'https://picsum.photos/seed/barton-creek-sunrise-yoga/1200/800',
+    category: 'WELLNESS' as const,
+    description:
+      'Sixty minutes, mostly long holds, on the limestone overlook. Class starts fifteen minutes before sunrise; plan accordingly.\n\nBring your own mat. Coffee truck waits at the trailhead.',
+  },
+
+  // ------------------------------- Seattle (second batch)
+  {
+    id: 31,
+    name: 'Pike Place Preserved: Ferment Workshop',
+    slug: 'pike-place-preserved-ferment-workshop',
+    city: 'Seattle',
+    location: 'Atrium Kitchen',
+    date: '2030-07-06T20:00:00.000Z',
+    organizerName: 'Pike Place Market Foundation',
+    imageUrl:
+      'https://picsum.photos/seed/pike-place-preserved-ferment-workshop/1200/800',
+    category: 'WORKSHOP' as const,
+    description:
+      'A three-hour hands-on — walk out with two jars you started and a primer you\'ll actually re-read. Kimchi, sauerkraut, and a wild-yeast starter to keep feeding.\n\nAll ingredients supplied.',
+  },
+  {
+    id: 32,
+    name: 'SeaMo Synth Hardware Meetup',
+    slug: 'seamo-synth-hardware-meetup',
+    city: 'Seattle',
+    location: 'The Crocodile (back bar)',
+    date: '2030-08-03T02:00:00.000Z',
+    organizerName: 'Pacific Waveform Collective',
+    imageUrl: 'https://picsum.photos/seed/seamo-synth-hardware-meetup/1200/800',
+    category: 'TECH' as const,
+    description:
+      'Bring a synth, a patch cable, and an opinion. Three short demos from local builders, an open jam after.',
+  },
+  {
+    id: 33,
+    name: 'Georgetown Tattoo Arts Expo',
+    slug: 'georgetown-tattoo-arts-expo',
+    city: 'Seattle',
+    location: 'Georgetown Ballroom',
+    date: '2030-09-27T19:00:00.000Z',
+    organizerName: 'Fifty Years of Seattle Ink',
+    imageUrl: 'https://picsum.photos/seed/georgetown-tattoo-arts-expo/1200/800',
+    category: 'ART' as const,
+    description:
+      'Twenty-eight Pacific-Northwest tattooers showing flash, prints, and the occasional guest-spot booking. Live tattooing on the main stage until close.',
+  },
+  {
+    id: 34,
+    name: 'West Seattle Farmers Film Night',
+    slug: 'west-seattle-farmers-film-night',
+    city: 'Seattle',
+    location: 'Junction Plaza',
+    date: '2030-08-24T03:00:00.000Z',
+    organizerName: 'Neighborhood Theatre',
+    imageUrl:
+      'https://picsum.photos/seed/west-seattle-farmers-film-night/1200/800',
+    category: 'FILM' as const,
+    description:
+      'A pop-up screen against the brick wall behind the Sunday market. This week: the Pattinson noir nobody saw in theaters.\n\nFree. Bring a camp chair.',
+  },
+
+  // ------------------------------- New York (second batch)
+  {
+    id: 35,
+    name: 'Dimes Square Poetry Night',
+    slug: 'dimes-square-poetry-night',
+    city: 'New York',
+    location: 'The Roxy Hotel Cinema',
+    date: '2030-06-21T23:00:00.000Z',
+    organizerName: 'The Drift',
+    imageUrl: 'https://picsum.photos/seed/dimes-square-poetry-night/1200/800',
+    category: 'ART' as const,
+    description:
+      'Five readers, fifteen minutes each, no microphone — the room seats thirty. Mostly essayists who also write poems, mostly reading the poems.',
+  },
+  {
+    id: 36,
+    name: 'Bushwick Warehouse Disco',
+    slug: 'bushwick-warehouse-disco',
+    city: 'New York',
+    location: 'Nowadays Outdoor',
+    date: '2030-07-26T05:00:00.000Z',
+    organizerName: 'Mister Sunday',
+    imageUrl: 'https://picsum.photos/seed/bushwick-warehouse-disco/1200/800',
+    category: 'MUSIC' as const,
+    description:
+      'An all-night disco and boogie set in the backyard. Doors at 11, last set goes till 6.\n\n21+, no photos on the floor.',
+  },
+  {
+    id: 37,
+    name: 'Chinatown Night Market',
+    slug: 'chinatown-night-market',
+    city: 'New York',
+    location: 'Forsyth Plaza',
+    date: '2030-08-17T00:00:00.000Z',
+    organizerName: 'Think!Chinatown',
+    imageUrl: 'https://picsum.photos/seed/chinatown-night-market/1200/800',
+    category: 'FOOD' as const,
+    description:
+      'Thirty-plus vendors, an outdoor stage, and Cantonese opera running through the evening. Cash and contactless both fine.\n\nOpen from seven till midnight. Come hungry.',
+  },
+  {
+    id: 38,
+    name: 'Fort Greene Flea',
+    slug: 'fort-greene-flea',
+    city: 'New York',
+    location: 'Lafayette & Vanderbilt',
+    date: '2030-05-18T14:00:00.000Z',
+    organizerName: 'Brooklyn Flea',
+    imageUrl: 'https://picsum.photos/seed/fort-greene-flea/1200/800',
+    category: 'FASHION' as const,
+    description:
+      'A hundred-plus vendors of vintage clothing, small-run designers, rare books, and weird records. Saturdays only; weather-dependent till May.',
+  },
+
+  // ------------------------------- Chicago (new city)
+  {
+    id: 39,
+    name: 'Green Mill Late Jazz Session',
+    slug: 'green-mill-late-jazz-session',
+    city: 'Chicago',
+    location: 'Green Mill Cocktail Lounge',
+    date: '2030-06-14T07:00:00.000Z',
+    organizerName: 'Green Mill',
+    imageUrl: 'https://picsum.photos/seed/green-mill-late-jazz-session/1200/800',
+    category: 'MUSIC' as const,
+    description:
+      'Two-a.m. slot, a working quartet, mostly standards plus one very slow ballad. Booths fill by midnight.\n\nCash preferred, cover rolls to five after one.',
+  },
+  {
+    id: 40,
+    name: 'Pilsen Muralists: Open Studios',
+    slug: 'pilsen-muralists-open-studios',
+    city: 'Chicago',
+    location: 'Chicago Arts District',
+    date: '2030-09-13T23:00:00.000Z',
+    organizerName: 'Second Friday',
+    imageUrl: 'https://picsum.photos/seed/pilsen-muralists-open-studios/1200/800',
+    category: 'ART' as const,
+    description:
+      'Every second Friday, eighteen blocks open their studio doors and pour wine badly. Maps at every entrance, prints for sale at most stops.',
+  },
+  {
+    id: 41,
+    name: 'Logan Square Pie Contest',
+    slug: 'logan-square-pie-contest',
+    city: 'Chicago',
+    location: 'Logan Square Farmers Market',
+    date: '2030-08-31T18:00:00.000Z',
+    organizerName: 'Logan Square Chamber of Arts',
+    imageUrl: 'https://picsum.photos/seed/logan-square-pie-contest/1200/800',
+    category: 'FOOD' as const,
+    description:
+      'Sixty home bakers, three judges, one giant ribbon. Public tasting starts at two; bring cash for the silent auction.',
+  },
+  {
+    id: 42,
+    name: 'iO Improv House Night',
+    slug: 'io-improv-house-night',
+    city: 'Chicago',
+    location: 'iO Theater',
+    date: '2030-05-31T02:00:00.000Z',
+    organizerName: 'iO Chicago',
+    imageUrl: 'https://picsum.photos/seed/io-improv-house-night/1200/800',
+    category: 'COMEDY' as const,
+    description:
+      'The house team, a guest monologist, and a very long Harold. Beer list short; patience for a slow first act required.',
+  },
+  {
+    id: 43,
+    name: 'Wicker Park Bookbinding Intensive',
+    slug: 'wicker-park-bookbinding-intensive',
+    city: 'Chicago',
+    location: 'Quimby\'s Bookstore',
+    date: '2030-07-12T15:00:00.000Z',
+    organizerName: 'Bound Together Studio',
+    imageUrl:
+      'https://picsum.photos/seed/wicker-park-bookbinding-intensive/1200/800',
+    category: 'WORKSHOP' as const,
+    description:
+      'A Saturday with thread, awl, and signature paper — leave with a pamphlet-stitch notebook and the pattern for a coptic binding. Materials included.',
+  },
+  {
+    id: 44,
+    name: 'Lakefront Sunrise Meditation',
+    slug: 'lakefront-sunrise-meditation',
+    city: 'Chicago',
+    location: 'North Avenue Beach',
+    date: '2030-06-28T11:00:00.000Z',
+    organizerName: 'Chicago Meditation Collective',
+    imageUrl: 'https://picsum.photos/seed/lakefront-sunrise-meditation/1200/800',
+    category: 'WELLNESS' as const,
+    description:
+      'Forty minutes seated, twenty walking along the shore. Free, weather-permitting, every other Saturday through September.',
+  },
+  {
+    id: 45,
+    name: 'Music Box Doc Fortnight',
+    slug: 'music-box-doc-fortnight',
+    city: 'Chicago',
+    location: 'Music Box Theatre',
+    date: '2030-10-05T01:30:00.000Z',
+    organizerName: 'Music Box Films',
+    imageUrl: 'https://picsum.photos/seed/music-box-doc-fortnight/1200/800',
+    category: 'FILM' as const,
+    description:
+      'Two weeks of new documentaries, most with directors present for Q&A. Opening night: a feature on the last surviving union hall on the south side.',
+  },
+  {
+    id: 46,
+    name: 'Midwest AI Salon',
+    slug: 'midwest-ai-salon',
+    city: 'Chicago',
+    location: 'The Bond Chapel, University of Chicago',
+    date: '2030-11-15T19:00:00.000Z',
+    organizerName: 'Inland Futures',
+    imageUrl: 'https://picsum.photos/seed/midwest-ai-salon/1200/800',
+    category: 'TECH' as const,
+    description:
+      'A half-day of short, unhurried talks on machine learning and the public interest. Moderated by a working journalist; no slides on fire.',
+  },
+
+  // ------------------------------- Austin (third batch)
+  {
+    id: 47,
+    name: 'East Austin Robotics Demo',
+    slug: 'east-austin-robotics-demo',
+    city: 'Austin',
+    location: 'Canopy East Austin',
+    date: '2030-09-28T19:00:00.000Z',
+    organizerName: 'Austin Robotics Guild',
+    imageUrl: 'https://picsum.photos/seed/east-austin-robotics-demo/1200/800',
+    category: 'TECH' as const,
+    description:
+      'Twelve local teams showing small, weird robots — a chess-playing arm, a plant-watering dog, a thing that folds laundry badly. Kids welcome; questions encouraged.',
+  },
+  {
+    id: 48,
+    name: 'Laguna Gloria Moonlight Sculpture Walk',
+    slug: 'laguna-gloria-moonlight-sculpture-walk',
+    city: 'Austin',
+    location: 'The Contemporary Austin — Laguna Gloria',
+    date: '2030-06-22T02:00:00.000Z',
+    organizerName: 'The Contemporary Austin',
+    imageUrl:
+      'https://picsum.photos/seed/laguna-gloria-moonlight-sculpture-walk/1200/800',
+    category: 'ART' as const,
+    description:
+      'A guided evening walk through the sculpture garden, lit only by the full moon and a handful of warm lanterns. Wine at the villa after. Advance tickets only.',
+  },
+  {
+    id: 49,
+    name: 'The Velveeta Room Sunday Showcase',
+    slug: 'the-velveeta-room-sunday-showcase',
+    city: 'Austin',
+    location: 'The Velveeta Room',
+    date: '2030-07-28T03:00:00.000Z',
+    organizerName: 'Velveeta Room Productions',
+    imageUrl:
+      'https://picsum.photos/seed/the-velveeta-room-sunday-showcase/1200/800',
+    category: 'COMEDY' as const,
+    description:
+      'A four-decade-old Sunday tradition — local headliners in a narrow room with low ceilings. Walk-ups welcome but the back rows go first.',
+  },
+  {
+    id: 50,
+    name: 'Paramount Summer Classics: Hitchcock Double',
+    slug: 'paramount-summer-classics-hitchcock-double',
+    city: 'Austin',
+    location: 'Paramount Theatre',
+    date: '2030-08-10T00:30:00.000Z',
+    organizerName: 'Austin Theatre Alliance',
+    imageUrl:
+      'https://picsum.photos/seed/paramount-summer-classics-hitchcock-double/1200/800',
+    category: 'FILM' as const,
+    description:
+      'Rear Window then Vertigo, both on 35mm, both introduced by film critic Richard Lawson. Intermission long enough for a drink and a breath.',
+  },
+
+  // ------------------------------- Seattle (third batch)
+  {
+    id: 51,
+    name: 'Capitol Hill Ramen Crawl',
+    slug: 'capitol-hill-ramen-crawl',
+    city: 'Seattle',
+    location: 'Pike/Pine corridor',
+    date: '2030-06-28T01:00:00.000Z',
+    organizerName: 'Eater Seattle',
+    imageUrl: 'https://picsum.photos/seed/capitol-hill-ramen-crawl/1200/800',
+    category: 'FOOD' as const,
+    description:
+      'Six shops, three hours, one tasting-card. Small bowls, no soup left behind. Start at Kizuki, end at Moto.',
+  },
+  {
+    id: 52,
+    name: 'Here-After Comedy Opening Weekend',
+    slug: 'here-after-comedy-opening-weekend',
+    city: 'Seattle',
+    location: 'Here-After',
+    date: '2030-10-11T04:30:00.000Z',
+    organizerName: 'Here-After Club',
+    imageUrl:
+      'https://picsum.photos/seed/here-after-comedy-opening-weekend/1200/800',
+    category: 'COMEDY' as const,
+    description:
+      'The first weekend for Seattle\'s newest comedy room — four rotating headliners across Friday and Saturday. Tight sets, intimate room, two drinks.',
+  },
+  {
+    id: 53,
+    name: 'Neumos Basement DJ Night',
+    slug: 'neumos-basement-dj-night',
+    city: 'Seattle',
+    location: 'Neumos (Barboza)',
+    date: '2030-07-19T05:30:00.000Z',
+    organizerName: 'KEXP After Dark',
+    imageUrl: 'https://picsum.photos/seed/neumos-basement-dj-night/1200/800',
+    category: 'MUSIC' as const,
+    description:
+      'Three local DJs trading sets till close. Mostly soul, some house, one surprise guest slot. No photos on the floor.',
+  },
+  {
+    id: 54,
+    name: 'Georgetown Sample Sale',
+    slug: 'georgetown-sample-sale',
+    city: 'Seattle',
+    location: 'Equinox Studios',
+    date: '2030-09-21T16:00:00.000Z',
+    organizerName: 'Seattle Made Co-op',
+    imageUrl: 'https://picsum.photos/seed/georgetown-sample-sale/1200/800',
+    category: 'FASHION' as const,
+    description:
+      'Nine independent Seattle designers clearing end-of-run and one-of-one pieces. Coffee and cinnamon rolls in the lobby; fitting rooms down the hall.',
+  },
+
+  // ------------------------------- New York (third batch)
+  {
+    id: 55,
+    name: 'UCB East Free Improv Jam',
+    slug: 'ucb-east-free-improv-jam',
+    city: 'New York',
+    location: 'UCB East Village',
+    date: '2030-06-09T03:30:00.000Z',
+    organizerName: 'Upright Citizens Brigade',
+    imageUrl: 'https://picsum.photos/seed/ucb-east-free-improv-jam/1200/800',
+    category: 'COMEDY' as const,
+    description:
+      'Monday night walk-ons. Sign up at the door, do five minutes with a house team, leave a better comic than you came. Free.',
+  },
+  {
+    id: 56,
+    name: 'Metrograph Late Classics: Agnès Varda',
+    slug: 'metrograph-late-classics-agnes-varda',
+    city: 'New York',
+    location: 'Metrograph',
+    date: '2030-11-08T04:00:00.000Z',
+    organizerName: 'Metrograph Pictures',
+    imageUrl:
+      'https://picsum.photos/seed/metrograph-late-classics-agnes-varda/1200/800',
+    category: 'FILM' as const,
+    description:
+      'Cléo from 5 to 7 on 35mm, introduced by critic Amy Taubin. Champagne and something small to eat after the film.',
+  },
+  {
+    id: 57,
+    name: 'Prospect Park Sound Bath',
+    slug: 'prospect-park-sound-bath',
+    city: 'New York',
+    location: 'Prospect Park Long Meadow',
+    date: '2030-08-04T23:00:00.000Z',
+    organizerName: 'Still Hour Studio',
+    imageUrl: 'https://picsum.photos/seed/prospect-park-sound-bath/1200/800',
+    category: 'WELLNESS' as const,
+    description:
+      'Ninety minutes of crystal bowls, chimes, and long, held tones as the light dims. Bring a blanket and a water bottle. No phones.',
+  },
+  {
+    id: 58,
+    name: 'Brooklyn Code Salon',
+    slug: 'brooklyn-code-salon',
+    city: 'New York',
+    location: 'Recurse Center',
+    date: '2030-10-25T23:00:00.000Z',
+    organizerName: 'Recurse Center',
+    imageUrl: 'https://picsum.photos/seed/brooklyn-code-salon/1200/800',
+    category: 'TECH' as const,
+    description:
+      'An afternoon of short, personal talks from working programmers — things they tried that didn\'t work, and what they learned from the failure. Tea, pastries, no pitches.',
+  },
 ];
 
 async function main() {
