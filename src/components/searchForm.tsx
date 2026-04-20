@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { EVENT_CATEGORIES } from '@/lib/validations';
 
 export default function SearchForm() {
   const [searchText, setSearchText] = useState('');
@@ -10,9 +11,21 @@ export default function SearchForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = searchText.trim();
-    router.push(
-      trimmed ? `/events?q=${encodeURIComponent(trimmed)}` : '/events'
-    );
+
+    // If the query is an exact category name (e.g. "music"), route straight
+    // to the category-filtered view so the corresponding pill lights up and
+    // the URL reads naturally (`?category=MUSIC` vs `?q=music`). Anything
+    // else becomes a free-text search as before.
+    const upper = trimmed.toUpperCase();
+    const categoryMatch = (EVENT_CATEGORIES as readonly string[]).includes(upper);
+
+    if (!trimmed) {
+      router.push('/events');
+    } else if (categoryMatch) {
+      router.push(`/events?category=${upper}`);
+    } else {
+      router.push(`/events?q=${encodeURIComponent(trimmed)}`);
+    }
   };
 
   return (
