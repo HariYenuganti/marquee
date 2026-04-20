@@ -124,7 +124,7 @@
 
 ## Design system
 
-The Marquee aesthetic is coded in two files so it&rsquo;s cheap to re-theme:
+The Marquee aesthetic is coded in two files so it's cheap to re-theme:
 
 - [`tailwind.config.ts`](tailwind.config.ts) — `base`, `ink`, `ember` color tokens; `font-sans`/`font-display` families.
 - [`src/app/globals.css`](src/app/globals.css) — CSS variables, scrollbar, react-day-picker overrides.
@@ -214,7 +214,7 @@ src/
 └── emails/           # React Email templates
 prisma/
 ├── schema.prisma     # Event, Booking, EventCategory
-└── seed.ts           # 26 events across 3 cities
+└── seed.ts           # 58 events across 4 cities (Austin, Seattle, NYC, Chicago)
 tests/
 └── booking.spec.ts   # Playwright E2E
 .github/workflows/
